@@ -69,7 +69,7 @@ if [[ -n "${CF_TOKEN}" ]]; then
   if [[ "$RUN_SCRIPT" != *"{{ name }}"* ]]; then
     export RUN_SCRIPT="$RUN_SCRIPT,{{ name }}"
   fi
-  bash $current_dir/../cloudflare_reload.sh
+  bash $WORKING_DIR/utils/cloudflare_reload.sh
 fi
 {% endif %}
 echo "### Done ###"

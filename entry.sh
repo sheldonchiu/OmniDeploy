@@ -40,13 +40,13 @@ apt-get install -qq -y curl jq git-lfs ninja-build \
     python3.10-venv python3.10-dev python3.10-tk libgl1 > /dev/null
 
 # Add alias to check the status of the web app
-chmod +x $WORKING_DIR/status_check.py
-echo "alias status='watch -n 1 /$WORKING_DIR/status_check.py'" >> ~/.bashrc
+chmod +x $WORKING_DIR/utils/status_check.py
+echo "alias status='watch -n 1 /$WORKING_DIR/utils/status_check.py'" >> ~/.bashrc
 
 # Use Nginx to expose web app in Paperspace
 apt-get install -qq -y nginx > /dev/null
-cp /$WORKING_DIR/nginx/default /etc/nginx/sites-available/default
-cp /$WORKING_DIR/nginx/nginx.conf /etc/nginx/nginx.conf
+cp /$WORKING_DIR/utils/nginx/default /etc/nginx/sites-available/default
+cp /$WORKING_DIR/utils/nginx/nginx.conf /etc/nginx/nginx.conf
 /usr/sbin/nginx
 
 # Read the RUN_SCRIPT environment variable

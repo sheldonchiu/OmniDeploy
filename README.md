@@ -1,5 +1,5 @@
 <div align="center">
-<h1>Ultimate Paperspace Template</h1>
+<h1>OmniDeloy</h1>
 
 **A Swiss knife for Paperspace notebooks**
 

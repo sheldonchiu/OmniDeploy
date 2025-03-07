@@ -1,0 +1,51 @@
+title: preprocess
+name: preprocess
+use_python: true
+
+prepare_repo: |-
+  TARGET_REPO_DIR=$PREPROCESS_REPO_DIR \
+  TARGET_REPO_BRANCH="main" \
+  TARGET_REPO_URL="https://github.com/sheldonchiu/paperspace-sd-auto-preprocess.git" \
+  prepare_repo
+
+  TARGET_REPO_DIR=$TRAINER_REPO_DIR \
+  TARGET_REPO_BRANCH="sdxl" \
+  TARGET_REPO_URL="https://github.com/sheldonchiu/kohya-trainer-paperspace.git" \
+  UPDATE_REPO="auto" \
+  prepare_repo  
+
+prepare_env: |-
+  cd $PREPROCESS_REPO_DIR/preprocess
+  bash prepare_env.sh
+
+  if env | grep -q "PAPERSPACE"; then
+    ln -s /storage /notebooks/storage
+    ln -s /tmp /notebooks/tmp
+  fi
+
+download_model: |-
+  bash $current_dir/../utils/sd_model_download/main.sh
+
+action_before_start: |-
+  cd $current_dir/../kosmos2
+  bash control.sh stop
+
+start: |-
+  cd $PREPROCESS_REPO_DIR/preprocess
+  
+  python main.py > $LOG_DIR/{{ name }}.log 2>&1 &
+  echo $! > /tmp/{{ name }}.pid
+
+custom_start: ""
+
+custom_reload: ""
+
+custom_stop: ""
+
+export_required_env: ""
+
+setup_env: |-
+  export PREPROCESS_REPO_DIR=/tmp/paperspace-sd-auto-preprocess
+  export TRAINER_REPO_DIR=/tmp/kohya-trainer-paperspace
+
+  export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/stable-diffusion-models/"}

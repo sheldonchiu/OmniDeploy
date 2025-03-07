@@ -1,0 +1,42 @@
+title: Command Server
+name: command
+use_python: true
+expose: true
+port: 7000
+
+prepare_env: "pip install -r requirements.txt"
+
+start: |-
+  cd $current_dir/server
+  PYTHONUNBUFFERED=1 service_loop "python -m uvicorn main:app --host 0.0.0.0 --port {{ port }}" > $LOG_DIR/{{ name }}.log 2>&1 &
+  echo $! > /tmp/{{ name }}.pid
+
+  if [[ -n "${DISCORD_BOT}" ]]; then
+    PYTHONUNBUFFERED=1 service_loop "python process.py" > $LOG_DIR/command_process.log 2>&1 &
+    echo $! > /tmp/{{ name }}_process.pid
+  fi
+
+  cd ..
+
+export_required_env: |-
+  export REQUIRED_ENV="COMMAND_USERNAME,COMMAND_PASSWORD"
+
+setup_env: |-
+  export {{ name|upper }}_PORT="{{ port }}"
+  export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
+  export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
+
+custom_stop: |-
+  kill_pid /tmp/{{ name }}.pid
+  if [[ -n "${DISCORD_BOT}" ]]; then
+    kill_pid /tmp/{{ name }}_process.pid
+  fi
+
+custom_reload: |-
+  kill_pid /tmp/{{ name }}.pid
+  if [[ -n "${DISCORD_BOT}" ]]; then
+    kill_pid /tmp/{{ name }}_process.pid
+  fi
+  # Wait for 1s to avoid unexpected behavior
+  sleep 1
+  bash main.sh
