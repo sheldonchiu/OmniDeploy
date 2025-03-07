@@ -63,18 +63,30 @@ fi
 
 # Loop through each script and execute the corresponding case
 echo "Starting script(s)"
+
 for script in "${scripts[@]}"
 do
-  cd $SCRIPT_ROOT_DIR
-  if [[ ! -d $script ]]; then
-    echo "Script folder $script not found, skipping..."
-    continue
-  fi
-  cd $script
-  source_env_file
-  if ! check_required_env_vars; then
-    echo "One or more required environment variables are missing."
-    continue
-  fi
-  bash control.sh reload
+    cd "$SCRIPT_ROOT_DIR" || exit 1
+    
+    # Search for the script directory recursively
+    script_dir=$(find . -type d -name "$script")
+    
+    if [[ -z "$script_dir" ]]; then
+        echo "Script folder $script not found, skipping..."
+        continue
+    fi
+    
+    # Change to the found directory
+    cd "$script_dir" || continue
+    
+    source_env_file
+    
+    if ! check_required_env_vars; then
+        echo "One or more required environment variables are missing."
+        continue
+    fi
+    
+    bash control.sh reload
 done
+
+echo "All scripts executed."
