@@ -4,6 +4,7 @@ import json
 import os
 import sys
 import argparse
+import shutil
 from pathlib import Path
 
 def create_symlinks(json_file, source_base, dest_base):
@@ -19,11 +20,8 @@ def create_symlinks(json_file, source_base, dest_base):
     source_base = Path(source_base).resolve()
     dest_base = Path(dest_base).resolve()
     
-    if not source_base.exists():
-        print(f"Error: Source base directory {source_base} does not exist.")
-        return False
-    
-    # Create destination directory if it doesn't exist
+    # Create directory if it doesn't exist
+    os.makedirs(source_base, exist_ok=True)
     os.makedirs(dest_base, exist_ok=True)
     
     # Load JSON configuration
@@ -39,7 +37,6 @@ def create_symlinks(json_file, source_base, dest_base):
     
     # Process each entry in the configuration
     for key, value in config.items():
-        source_dir = source_base / key
         
         # Handle both single path and list of paths
         if isinstance(value, list):
@@ -52,9 +49,20 @@ def create_symlinks(json_file, source_base, dest_base):
                 source_path = source_base / subfolder
                 
                 create_single_symlink(source_path, dest_link)
+        elif isinstance(value, dict):
+            # Create a directory for the key first
+            os.makedirs(dest_base / key, exist_ok=True)
+            
+            # For dict values, create symlinks to each subfolder
+            for subkey, subvalue in value.items():
+                dest_link = dest_base / key / subkey
+                source_path = source_base / subvalue
+                
+                create_single_symlink(source_path, dest_link)
         else:
             # For single values, create a direct symlink
-            dest_link = dest_base / value
+            source_dir = source_base / value
+            dest_link = dest_base / key
             create_single_symlink(source_dir, dest_link)
     
     return True
@@ -70,8 +78,7 @@ def create_single_symlink(source, dest):
     if dest.is_symlink():
         dest.unlink()
     elif dest.exists():
-        print(f"Warning: {dest} already exists and is not a symlink. Skipping.")
-        return
+        shutil.rmtree(dest)
     
     # Create parent directories if they don't exist
     os.makedirs(dest.parent, exist_ok=True)

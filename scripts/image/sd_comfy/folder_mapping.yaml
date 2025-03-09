@@ -21,11 +21,12 @@
   "diffusers": "Diffusers",
   "gligen": "GLIGEN",
   "vae_approx": "ApproxVAE",
-  "ipadapter": [
-    "IpAdapter",
-    "InvokeIpAdapters15",
-    "InvokeIpAdaptersXl"
-  ],
+  "ipadapter": 
+    {
+      "base": "IpAdapter",
+      "sd15": "InvokeIpAdapters15",
+      "sdxl": "InvokeIpAdaptersXl"
+    },
   "prompt_expansion": "PromptExpansion",
   "ultralytics": "Ultralytics",
   "sams": "Sams",
