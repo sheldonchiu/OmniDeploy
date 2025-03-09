@@ -17,6 +17,15 @@ if [[ "$REINSTALL_{{ name|upper }}" || ! -f "/tmp/{{ name }}.prepared" ]]; then
     rm -rf $VENV_DIR/{{ name }}-env
     {% if use_python %}
     {% if python_version %}
+    echo "### Installing Python {{ python_version }} ###"
+    apt-get install -y software-properties-common > /dev/null
+    add-apt-repository -y ppa:deadsnakes/ppa
+    apt-get update -qq
+    apt-get install -y python{{ python_version }} \
+     python{{ python_version }}-venv \
+     python{{ python_version }}-dev \
+     python{{ python_version }}-tk > /dev/null
+
     python{{ python_version }} -m venv $VENV_DIR/{{ name }}-env
     {% else %}
     python3 -m venv /tmp/{{ name }}-env

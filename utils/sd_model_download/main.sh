@@ -23,8 +23,8 @@ for module in "${MODULES[@]}"; do
 done
 
 if ! [ -v "MODEL_DIR" ]; then
-    source $current_dir/../../.env
-    export MODEL_DIR="$DATA_DIR/stable-diffusion-models"
+    source $WORKING_DIR/.env
+    export MODEL_DIR="$DATA_DIR/models"
 fi
 # This only happen when directly using this script
 if ! [ -v "MODEL_LIST" ]; then

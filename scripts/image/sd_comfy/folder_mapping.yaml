@@ -1,0 +1,33 @@
+{
+  "checkpoints": "StableDiffusion",
+  "vae": "VAE",
+  "loras": [
+    "Lora",
+    "LyCORIS"
+  ],
+  "upscale_models": [
+    "ESRGAN",
+    "RealESRGAN",
+    "SwinIR"
+  ],
+  "embeddings": "TextualInversion",
+  "hypernetworks": "Hypernetwork",
+  "controlnet": [
+    "ControlNet",
+    "T2IAdapter"
+  ],
+  "text_encoders": "TextEncoder",
+  "clip_vision": "InvokeClipVision",
+  "diffusers": "Diffusers",
+  "gligen": "GLIGEN",
+  "vae_approx": "ApproxVAE",
+  "ipadapter": [
+    "IpAdapter",
+    "InvokeIpAdapters15",
+    "InvokeIpAdaptersXl"
+  ],
+  "prompt_expansion": "PromptExpansion",
+  "ultralytics": "Ultralytics",
+  "sams": "Sams",
+  "diffusion_models": "Unet"
+}

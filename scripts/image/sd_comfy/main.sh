@@ -19,21 +19,18 @@ if [[ "$REINSTALL_SD_COMFY" || ! -f "/tmp/sd_comfy.prepared" ]]; then
     UPDATE_REPO=$SD_COMFY_UPDATE_REPO \
     UPDATE_REPO_COMMIT=$SD_COMFY_UPDATE_REPO_COMMIT \
     prepare_repo 
-
-    symlinks=(
-      "$REPO_DIR/output:$IMAGE_OUTPUTS_DIR/stable-diffusion-comfy"
-      "$MODEL_DIR:$WORKING_DIR/models"
-      "$MODEL_DIR/sd:$LINK_MODEL_TO"
-      "$MODEL_DIR/lora:$LINK_LORA_TO"
-      "$MODEL_DIR/vae:$LINK_VAE_TO"
-      "$MODEL_DIR/upscaler:$LINK_UPSCALER_TO"
-      "$MODEL_DIR/controlnet:$LINK_CONTROLNET_TO"
-      "$MODEL_DIR/embedding:$LINK_EMBEDDING_TO"
-    )
-    prepare_link "${symlinks[@]}"
     rm -rf $VENV_DIR/sd_comfy-env
     
     
+    echo "### Installing Python 3.12 ###"
+    apt-get install -y software-properties-common > /dev/null
+    add-apt-repository -y ppa:deadsnakes/ppa
+    apt-get update -qq
+    apt-get install -y python3.12 \
+     python3.12-venv \
+     python3.12-dev \
+     python3.12-tk > /dev/null
+
     python3.12 -m venv $VENV_DIR/sd_comfy-env
     
     source $VENV_DIR/sd_comfy-env/bin/activate
@@ -41,9 +38,16 @@ if [[ "$REINSTALL_SD_COMFY" || ! -f "/tmp/sd_comfy.prepared" ]]; then
     pip install pip==24.0
     pip install --upgrade wheel setuptools
     
+    python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.yaml $MODEL_DIR $REPO_DIR/models
+
     cd $REPO_DIR
     pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
     pip install -r requirements.txt
+
+    cd "$REPO_DIR/custom_nodes"
+    if [[ ! -d "comfyui-manager" ]]; then
+      git clone https://github.com/ltdrdata/ComfyUI-Manager comfyui-manager
+    fi
     
     touch /tmp/sd_comfy.prepared
 else
@@ -57,7 +61,7 @@ log "Finished Preparing Environment for Stable Diffusion Comfy"
 if [[ -z "$SKIP_MODEL_DOWNLOAD" ]]; then
   echo "### Downloading Model for Stable Diffusion Comfy ###"
   log "Downloading Model for Stable Diffusion Comfy"
-  bash $current_dir/../utils/sd_model_download/main.sh
+  bash $WORKING_DIR/utils/sd_model_download/main.sh
   log "Finished Downloading Models for Stable Diffusion Comfy"
 else
   log "Skipping Model Download for Stable Diffusion Comfy"

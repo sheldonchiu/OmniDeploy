@@ -35,21 +35,34 @@ mkdir -p $ROOT_REPO_DIR
 mkdir -p $VENV_DIR
 mkdir -p $LOG_DIR
 
-echo "Installing common dependencies"
-apt-get update -qq
-apt-get install -y curl jq git-lfs ninja-build gettext-base \
-    aria2 zip python3-venv python3-dev python3.10 \
-    python3.10-venv python3.10-dev python3.10-tk libgl1 libglib2.0-0 > /dev/null
+if [[ ! -f "/tmp/prepared" ]]; then
 
-# Add alias to check the status of the web app
-chmod +x $WORKING_DIR/utils/status_check.py
-echo "alias status='watch -n 1 /$WORKING_DIR/utils/status_check.py'" >> ~/.bashrc
+  echo "Installing common dependencies"
+  apt-get update -qq
+  apt-get install -y curl jq git-lfs ninja-build gettext-base \
+      aria2 zip python3.10 python3-venv python3-dev \
+      python3.10-venv python3.10-dev python3.10-tk libgl1 libglib2.0-0 > /dev/null
 
-# Use Nginx to expose web app in Paperspace
-apt-get install -qq -y nginx > /dev/null
-envsubst < /workspace/OmniDeploy/utils/nginx/default > /etc/nginx/sites-available/default
-cp /$WORKING_DIR/utils/nginx/nginx.conf /etc/nginx/nginx.conf
-/usr/sbin/nginx
+  # Add alias to check the status of the web app
+  chmod +x $WORKING_DIR/utils/status_check.py
+  echo "alias status='watch -n 1 /$WORKING_DIR/utils/status_check.py'" >> ~/.bashrc
+
+  # Use Nginx to expose web app
+  echo "Installing Nginx"
+  apt-get install -qq -y nginx > /dev/null
+  envsubst '$NGINX_PORT' < /workspace/OmniDeploy/utils/nginx/default > /etc/nginx/sites-available/default
+  cp /$WORKING_DIR/utils/nginx/nginx.conf /etc/nginx/nginx.conf
+
+  # Check if nginx is already running and reload, otherwise start it
+  if pgrep nginx > /dev/null; then
+      nginx -s reload
+  else
+      /usr/sbin/nginx
+  fi
+
+fi 
+
+touch /tmp/prepared
 
 # Read the RUN_SCRIPT environment variable
 run_script="$RUN_SCRIPT"

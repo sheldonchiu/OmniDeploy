@@ -4,7 +4,7 @@ map $http_referer $first_subpath {
 }
 
 server {
-    listen ${NGINX_PORT:-8888};
+    listen ${NGINX_PORT};
 
     # Common proxy settings
     proxy_set_header Host $host;

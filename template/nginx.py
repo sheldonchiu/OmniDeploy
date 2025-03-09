@@ -10,7 +10,7 @@ output_file = Path(current_path).parent / "utils/nginx/default"
 
 if __name__ == "__main__":
     # Load the YAML file
-    targets = Path(current_path).parent / "**" / "template.yaml"
+    targets = Path(current_path).parent / "configs/*.yaml"
     yaml_files = glob(str(targets), recursive=True)
     yaml_files.sort()
 
