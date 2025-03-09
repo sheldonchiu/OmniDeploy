@@ -37,7 +37,7 @@ mkdir -p $LOG_DIR
 
 echo "Installing common dependencies"
 apt-get update -qq
-apt-get install -y curl jq git-lfs ninja-build \
+apt-get install -y curl jq git-lfs ninja-build gettext-base \
     aria2 zip python3-venv python3-dev python3.10 \
     python3.10-venv python3.10-dev python3.10-tk libgl1 libglib2.0-0 > /dev/null
 
@@ -47,7 +47,7 @@ echo "alias status='watch -n 1 /$WORKING_DIR/utils/status_check.py'" >> ~/.bashr
 
 # Use Nginx to expose web app in Paperspace
 apt-get install -qq -y nginx > /dev/null
-cp /$WORKING_DIR/utils/nginx/default /etc/nginx/sites-available/default
+envsubst < /workspace/OmniDeploy/utils/nginx/default > /etc/nginx/sites-available/default
 cp /$WORKING_DIR/utils/nginx/nginx.conf /etc/nginx/nginx.conf
 /usr/sbin/nginx
 
