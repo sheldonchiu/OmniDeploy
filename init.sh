@@ -1,10 +1,10 @@
 #!/bin/bash
-# apt -qq update && apt install -qq curl && curl -s https://raw.githubusercontent.com/sheldonchiu/OmniDeploy/refs/heads/dev/init.sh | bash
+# apt-get -qq update && apt-get install -y curl > /dev/null && curl -s https://raw.githubusercontent.com/sheldonchiu/OmniDeploy/refs/heads/dev/init.sh | bash
 set -e
 
 # Update and install dependencies with reduced verbosity
 apt-get update -qq
-apt-get install -y -qq git
+apt-get install -y git > /dev/null
 
 # Set default working directory if not defined
 WORKING_DIR=${WORKING_DIR:-"/workspace"}

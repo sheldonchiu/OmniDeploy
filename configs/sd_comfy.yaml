@@ -1,7 +1,8 @@
 title: Stable Diffusion Comfy
 name: sd_comfy
+path: image/sd_comfy
 use_python: true
-python_version: 3.10
+python_version: 3.12
 expose: true
 port: 7005
 
@@ -27,8 +28,7 @@ prepare_repo: |-
 
 prepare_env: |-
   cd $REPO_DIR
-  pip install xformers
-  pip install torchvision torchaudio --no-deps
+  pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
   pip install -r requirements.txt
 
 download_model: |-

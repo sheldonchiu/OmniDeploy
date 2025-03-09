@@ -34,7 +34,6 @@ mkdir -p $VENV_DIR
 mkdir -p $LOG_DIR
 
 echo "Installing common dependencies"
-export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
 apt-get install -y curl jq git-lfs ninja-build \
     aria2 zip python3-venv python3-dev python3.10 \

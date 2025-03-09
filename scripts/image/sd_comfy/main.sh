@@ -34,7 +34,7 @@ if [[ "$REINSTALL_SD_COMFY" || ! -f "/tmp/sd_comfy.prepared" ]]; then
     rm -rf $VENV_DIR/sd_comfy-env
     
     
-    python3.10 -m venv $VENV_DIR/sd_comfy-env
+    python3.12 -m venv $VENV_DIR/sd_comfy-env
     
     source $VENV_DIR/sd_comfy-env/bin/activate
 
@@ -42,8 +42,7 @@ if [[ "$REINSTALL_SD_COMFY" || ! -f "/tmp/sd_comfy.prepared" ]]; then
     pip install --upgrade wheel setuptools
     
     cd $REPO_DIR
-    pip install xformers
-    pip install torchvision torchaudio --no-deps
+    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
     pip install -r requirements.txt
     
     touch /tmp/sd_comfy.prepared

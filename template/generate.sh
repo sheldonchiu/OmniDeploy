@@ -29,5 +29,8 @@ done
 
 echo "All YAML files processed."
 
-cd $current_dir
+cd $SCRIPT_DIR
+echo "Generating nginx config"
 python3 nginx.py
+
+echo "Done"

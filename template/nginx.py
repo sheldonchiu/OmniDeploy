@@ -6,7 +6,7 @@ from jinja2 import Template
 from pathlib import Path
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-output_file = Path(current_path).parent / "nginx/default"
+output_file = Path(current_path).parent / "utils/nginx/default"
 
 if __name__ == "__main__":
     # Load the YAML file
