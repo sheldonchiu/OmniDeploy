@@ -1,6 +1,8 @@
 #!/bin/bash
 # Don't exit on error
 
+export DEBIAN_FRONTEND=noninteractive
+
 function source_env_file() {
   if [[ -e ".env" ]]; then
     source ".env"
