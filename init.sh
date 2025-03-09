@@ -1,4 +1,5 @@
 #!/bin/bash
+# apt -qq update && apt install -qq curl && curl -s https://raw.githubusercontent.com/sheldonchiu/OmniDeploy/refs/heads/dev/init.sh | bash
 set -e
 
 # Update and install dependencies with reduced verbosity
@@ -13,4 +14,5 @@ mkdir -p "$WORKING_DIR"
 cd "$WORKING_DIR"
 git clone https://github.com/sheldonchiu/OmniDeploy.git
 cd "$WORKING_DIR/OmniDeploy"
+git checkout dev
 bash entry.sh
