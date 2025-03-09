@@ -1,7 +1,7 @@
 title: FastChat
 name: fastchat
 use_python: true
-python_version: 10
+python_version: 3.10
 expose: true
 port: 7001
 

@@ -1,7 +1,7 @@
 title: Stable Diffusion Forge
 name: sd_forge
 use_python: true
-python_version: 10
+python_version: 3.10
 expose: true
 port: 7018
 
@@ -26,7 +26,8 @@ prepare_repo: |-
   prepare_link  "${symlinks[@]}"
 
 prepare_env: |-
-  pip install torch==2.1.2 torchvision torchaudio protobuf lxml
+  pip install protobuf lxml
+  pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu124
 
   export PYTHONPATH="$PYTHONPATH:$REPO_DIR"
   # must run inside webui dir since env['PYTHONPATH'] = os.path.abspath(".") existing in launch.py
@@ -34,7 +35,7 @@ prepare_env: |-
   python $current_dir/preinstall.py
   cd $current_dir
 
-  pip install xformers==0.0.23.post1
+  pip3 install -U xformers==0.0.28.post1 --index-url https://download.pytorch.org/whl/cu124
 
 download_model: |-
   bash $current_dir/../utils/sd_model_download/main.sh

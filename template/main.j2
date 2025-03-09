@@ -17,7 +17,7 @@ if [[ "$REINSTALL_{{ name|upper }}" || ! -f "/tmp/{{ name }}.prepared" ]]; then
     rm -rf $VENV_DIR/{{ name }}-env
     {% if use_python %}
     {% if python_version %}
-    python3.{{ python_version }} -m venv $VENV_DIR/{{ name }}-env
+    python{{ python_version }} -m venv $VENV_DIR/{{ name }}-env
     {% else %}
     python3 -m venv /tmp/{{ name }}-env
     {% endif %}

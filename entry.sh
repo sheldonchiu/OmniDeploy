@@ -34,10 +34,11 @@ mkdir -p $VENV_DIR
 mkdir -p $LOG_DIR
 
 echo "Installing common dependencies"
+export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
-apt-get install -qq -y curl jq git-lfs ninja-build \
+apt-get install -y curl jq git-lfs ninja-build \
     aria2 zip python3-venv python3-dev python3.10 \
-    python3.10-venv python3.10-dev python3.10-tk libgl1 > /dev/null
+    python3.10-venv python3.10-dev python3.10-tk libgl1 libglib2.0-0 > /dev/null
 
 # Add alias to check the status of the web app
 chmod +x $WORKING_DIR/utils/status_check.py

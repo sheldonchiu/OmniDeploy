@@ -46,7 +46,7 @@ if [[ "$REINSTALL_SD_A111" || ! -f "/tmp/sd_a111.prepared" ]]; then
     
     source $VENV_DIR/sd_a111-env/bin/activate
 
-    pip install pip==24.0
+    # pip install pip==24.0
     pip install --upgrade wheel setuptools
     
     # fix install issue with pycairo, which is needed by sd-webui-controlnet

@@ -2,7 +2,7 @@ title: Stable Diffusion WebUI
 name: sd_a111
 path: image/sd_a111
 use_python: true
-python_version: 10
+python_version: 3.10
 expose: true
 port: 7008
 
