@@ -30,7 +30,7 @@ done
 echo "All YAML files processed."
 
 cd $SCRIPT_DIR
-echo "Generating nginx config"
-python3 nginx.py
+echo "Generating proxy config"
+python3 createCaddyfile.py
 
 echo "Done"

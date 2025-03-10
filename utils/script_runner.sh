@@ -44,7 +44,7 @@ show_main_menu() {
   echo -e "${BLUE}=== YAML Script Runner ===${NC}"
   
   # Use gum choose to create a top-level menu
-  selected_option=$(gum choose "Run Scripts" "Run Status Monitor" "Configure Settings" "Help" "Exit")
+  selected_option=$(gum choose "Run Scripts" "Run Status Monitor" "Manage Processes" "Configure Settings" "Help" "Exit")
   
   case "$selected_option" in
     "Run Scripts")
@@ -52,6 +52,9 @@ show_main_menu() {
       ;;
     "Run Status Monitor")
       run_status_monitor
+      ;;
+    "Manage Processes")
+      manage_pid_processes
       ;;
     "Configure Settings")
       configure_settings
@@ -68,6 +71,130 @@ show_main_menu() {
       ;;
   esac
 }
+
+# Function to manage PID processes
+manage_pid_processes() {
+  echo -e "${BLUE}=== Manage Processes ===${NC}"
+  
+  # Arrays to store valid PID files and process names
+  pid_files=()
+  pid_names=()
+  pid_numbers=()
+  
+  echo -e "${YELLOW}Scanning for active processes...${NC}"
+  
+  # Look for all .pid files in /tmp and check if PIDs still exist
+  while IFS= read -r file; do
+    if [ -f "$file" ]; then
+      # Read the PID from the file
+      pid_number=$(cat "$file" 2>/dev/null | tr -d '\n\r')
+      
+      # Check if the content is a valid number and if the process exists
+      if [[ "$pid_number" =~ ^[0-9]+$ ]] && kill -0 "$pid_number" 2>/dev/null; then
+        pid_files+=("$file")
+        filename=$(basename "$file" .pid)
+        pid_names+=("$filename")
+        pid_numbers+=("$pid_number")
+      fi
+    fi
+  done < <(find /tmp -type f -name "*.pid" | sort)
+  
+  if [ ${#pid_files[@]} -eq 0 ]; then
+    echo -e "${YELLOW}No active processes found with PID files in /tmp.${NC}"
+    
+    # Wait for user to press Enter or ESC
+    if wait_for_input; then
+      return  # ESC was pressed, return immediately
+    fi
+    return 0
+  fi
+  
+  # Create display options with PID information
+  display_options=()
+  for i in "${!pid_names[@]}"; do
+    display_options+=("$i:${pid_names[$i]} (PID: ${pid_numbers[$i]})")
+  done
+  
+  echo -e "${YELLOW}Select processes to manage (use Tab or Ctrl+Space to select multiple, Enter to confirm):${NC}"
+  echo -e "${YELLOW}Press ESC to return to main menu.${NC}"
+  
+  # Use gum choose for multi-selection and get selected indices
+  selected_indices=$(printf "%s\n" "${display_options[@]}" | 
+                    gum choose --no-limit | 
+                    cut -d':' -f1) || return  # User pressed ESC
+  
+  # Check if any selections were made
+  if [ -z "$selected_indices" ]; then
+    echo -e "${YELLOW}No processes selected. Returning to main menu.${NC}"
+    sleep 1
+    return 0
+  fi
+  
+  # Ask what action to perform on the selected processes
+  echo -e "${YELLOW}Select action to perform:${NC}"
+  action=$(gum choose "Reload" "Stop") || return  # User pressed ESC
+  
+  # Convert action to lowercase for the command parameter
+  action_cmd=$(echo "$action" | tr '[:upper:]' '[:lower:]')
+  
+  # Display selected processes and execute chosen action
+  echo -e "${GREEN}${action}ing selected processes:${NC}"
+  
+  for index in $selected_indices; do
+    selected_name="${pid_names[$index]}"
+    selected_pid="${pid_numbers[$index]}"
+    
+    echo -e "  - $selected_name (PID: $selected_pid)"
+    
+    # Search for a folder with the same name under the scripts directory
+    echo -e "${YELLOW}Searching for control script for: $selected_name${NC}"
+    
+    # Find the control.sh file in a folder matching the process name
+    control_script=""
+    while IFS= read -r script_path; do
+      if [ -f "$script_path" ]; then
+        control_script="$script_path"
+        break
+      fi
+    done < <(find "scripts" -type d -name "$selected_name" -exec find {} -name "control.sh" \; 2>/dev/null)
+    
+    if [ -n "$control_script" ]; then
+      echo -e "${GREEN}Found control script: $control_script${NC}"
+      echo -e "${YELLOW}Executing: bash $control_script $action_cmd${NC}"
+      
+      # Execute the control script with the selected action parameter
+      bash "$control_script" "$action_cmd"
+
+      sleep 1
+      
+      # Verify the action result
+      if [ "$action_cmd" = "stop" ]; then
+        # For stop action, check if process is still running
+        if kill -0 "${pid_numbers[$index]}" 2>/dev/null; then
+          echo -e "${RED}Process is still running. Control script may have failed.${NC}"
+        else
+          echo -e "${GREEN}Process stopped successfully.${NC}"
+        fi
+      elif [ "$action_cmd" = "reload" ]; then
+        # For reload action, check if process is still running (should be)
+        echo -e "${GREEN}Process Reloading, please wait for it to start.${NC}"
+      fi
+    else
+      echo -e "${RED}No control script found for $selected_name!${NC}"
+      echo -e "${YELLOW}Looked for scripts/$selected_name/control.sh or similar.${NC}"
+    fi
+    
+    echo
+  done
+  
+  # Wait for user to press Enter or ESC
+  if wait_for_input; then
+    return  # ESC was pressed, return immediately
+  fi
+}
+
+
+
 
 # Function to run the status monitor
 run_status_monitor() {
@@ -334,6 +461,7 @@ show_help() {
   echo -e "${YELLOW}Main Menu Options:${NC}"
   echo -e "  ${GREEN}Run Scripts${NC}: Select and run one or more scripts"
   echo -e "  ${GREEN}Run Status Monitor${NC}: Start the status monitoring tool"
+  echo -e "  ${GREEN}Manage Processes${NC}: Find and stop processes with PID files in /tmp"
   echo -e "  ${GREEN}Configure Settings${NC}: Change configuration options like directory paths"
   echo -e "  ${GREEN}Help${NC}: Show this help information"
   echo -e "  ${GREEN}Exit${NC}: Exit the program"
@@ -353,6 +481,11 @@ show_help() {
   echo -e "  - This is a long-running process that monitors system status"
   echo -e "  - Press Ctrl+C to stop the monitor and return to the previous menu"
   echo -e "  - Press ESC to stop the monitor and return to the main menu"
+  echo -e ""
+  echo -e "${YELLOW}Process Management:${NC}"
+  echo -e "  - Lists all PID files found in /tmp"
+  echo -e "  - Allows you to select processes to stop"
+  echo -e "  - Uses the kill_pid function from helper.sh to safely stop processes"
   echo -e ""
   echo -e "${YELLOW}Script Requirements:${NC}"
   echo -e "  - YAML files should include 'title', 'name' and optionally 'description'"

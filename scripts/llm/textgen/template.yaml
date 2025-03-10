@@ -99,8 +99,8 @@ setup_env: |-
 
   export LINK_MODEL_TO=${{ '{' ~ name|upper }}_LINK_MODEL_TO:-"$REPO_DIR/models"}
 
-nginx_extra: |-
-  location ~* ^/textgen-openai/(.*)$ {
-      rewrite ^/textgen-openai/(.*)$ /$1 break;
-      proxy_pass http://localhost:7013;
-  }
+# nginx_extra: |-
+#   location ~* ^/textgen-openai/(.*)$ {
+#       rewrite ^/textgen-openai/(.*)$ /$1 break;
+#       proxy_pass http://localhost:7013;
+#   }

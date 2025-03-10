@@ -1,0 +1,137 @@
+# The Caddyfile is an easy way to configure your Caddy web server.
+#
+# Unless the file starts with a global options block, the first
+# uncommented line is always the address of your site.
+#
+# To use your own domain name (with automatic HTTPS), first make
+# sure your domain's A/AAAA DNS records are properly pointed to
+# this machine's public IP, then replace ":80" below with your
+# domain name.
+
+:${CADDY_PORT} {
+    log {
+        output file ${LOG_DIR}/caddy.log {
+            roll_size 100MiB     # Roll at 100MB (default)
+            roll_keep 10         # Keep 10 files (default)
+            roll_keep_for 2160h  # Keep for 90 days (default)
+        }
+    }
+    # Handle Jupyter WebSocket connections with regex matching
+    @jupyter_ws {
+        path_regexp jupyter ^/api/kernels/[^/]+/(channels|iopub|shell|stdin)/?$|^/terminals/websocket/?$
+    }
+
+    handle @jupyter_ws {
+        reverse_proxy localhost:8890 {
+            # Set longer timeout for WebSocket connections
+            transport http {
+                read_timeout 86400s
+            }
+        }
+    }
+
+
+    handle_path /kosmos2/* {
+        
+        reverse_proxy localhost:7014
+        
+    }
+
+    
+
+    handle_path /musicgen/* {
+        
+        reverse_proxy localhost:7003
+        
+    }
+
+    
+
+    handle_path /sd-a111/* {
+        
+        reverse_proxy localhost:7008
+        
+    }
+
+    
+
+    handle_path /swarmui/* {
+        
+        reverse_proxy localhost:7016
+        
+    }
+
+    
+
+    handle_path /comfyui/* {
+        
+        reverse_proxy localhost:7005
+        
+    }
+
+    
+
+    handle_path /invokeai/* {
+        
+        reverse_proxy localhost:7006
+        
+    }
+
+    
+
+    handle_path /sd-fooocus/* {
+        
+        reverse_proxy localhost:7015
+        
+    }
+
+    
+
+    handle_path /sd-forge/* {
+        
+        reverse_proxy localhost:7018
+        
+    }
+
+    
+
+    handle_path /command/* {
+        
+        reverse_proxy localhost:7000
+        
+    }
+
+    
+
+    handle_path /image-browser/* {
+        
+        rewrite * /infinite_image_browsing{path}
+        reverse_proxy localhost:7002
+        
+    }
+
+    
+
+    handle_path /rclone/* {
+        
+        reverse_proxy localhost:7004
+        
+    }
+
+    
+
+    handle_path /syncthing/* {
+        
+        reverse_proxy http://localhost:7019 {
+                header_up Host {upstream_hostport}
+        }
+        
+    }
+
+    
+
+
+}
+
+# Refer to the Caddy docs for more information:
+# https://caddyserver.com/docs/caddyfile

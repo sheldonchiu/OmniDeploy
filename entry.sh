@@ -58,18 +58,21 @@ if [[ ! -f "/tmp/prepared" ]]; then
   echo "alias gui='bash $WORKING_DIR/utils/script_runner.sh'" >> ~/.bashrc
   source ~/.bashrc
 
+  # Use Caddy to expose web app
+  echo "Installing Caddy Proxy"
+  apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl > /dev/null
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' |  gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+  apt-get -qq update
+  apt-get install -y caddy > /dev/null
 
-  # Use Nginx to expose web app
-  echo "Installing Nginx"
-  apt-get install -qq -y nginx > /dev/null
-  envsubst '$NGINX_PORT' < /workspace/OmniDeploy/utils/nginx/default > /etc/nginx/sites-available/default
-  cp /$WORKING_DIR/utils/nginx/nginx.conf /etc/nginx/nginx.conf
+  nvsubst '$CADDY_PORT $LOG_DIR' < $WORKING_DIR/scripts/Caddyfile > /etc/caddy/Caddyfile
 
-  # Check if nginx is already running and reload, otherwise start it
-  if pgrep nginx > /dev/null; then
-      nginx -s reload
+  # Check if caddy is already running and reload, otherwise start it
+  if pgrep caddy > /dev/null; then
+      /usr/bin/caddy reload --config /etc/caddy/Caddyfile
   else
-      /usr/sbin/nginx
+      /usr/bin/caddy start --pidfile /tmp/caddy.pid
   fi
 
 fi 

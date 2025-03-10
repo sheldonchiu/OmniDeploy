@@ -44,11 +44,7 @@ setup_env: |-
   export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
   export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
 
-nginx_override: |-
-  absolute_redirect off;
-  return 301 /infinite_image_browsing;
+caddy_override: |-
+  rewrite * /infinite_image_browsing{path}
+  reverse_proxy localhost:{{ port }}
 
-nginx_extra: |-
-  location /infinite_image_browsing {
-      proxy_pass http://localhost:7002/infinite_image_browsing;
-    }

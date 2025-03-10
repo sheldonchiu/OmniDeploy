@@ -6,7 +6,7 @@ from jinja2 import Template
 from pathlib import Path
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-output_file = Path(current_path).parent / "utils/nginx/default"
+output_file = Path(current_path).parent / "scripts/Caddyfile"
 
 if __name__ == "__main__":
     # Load the YAML file
@@ -30,16 +30,17 @@ if __name__ == "__main__":
                 print("Missing name or port for " + file)
                 continue
             output = {"name": yaml_data["name"], "port": yaml_data["port"]}
-            output["nginx_override"] = (
-                yaml_data["nginx_override"] if "nginx_override" in yaml_data else None
+            output["caddy_override"] = (
+                yaml_data["caddy_override"] if "caddy_override" in yaml_data else None
             )
-            output["nginx_extra"] = (
-                yaml_data["nginx_extra"] if "nginx_extra" in yaml_data else None
+            output["caddy_extra"] = (
+                yaml_data["caddy_extra"] if "caddy_extra" in yaml_data else None
             )
             data.append(output)
 
-    with open(os.path.join(current_path, 'nginx-site.j2')) as f:
+    with open(os.path.join(current_path, 'caddy.j2')) as f:
         template = Template(f.read())
+    
     result = template.render({'data': data})
     with open(output_file, "w") as f:
         f.write(result)
