@@ -18,9 +18,24 @@ server {
     # jupyter lab
     location / {
     
+        if ($first_subpath ~* sd-a111) {
+            rewrite ^/sd-a111/(.*)$ /$1 break;
+            proxy_pass http://localhost:7008;
+        }
+    
         if ($first_subpath ~* sd-comfy) {
             rewrite ^/sd-comfy/(.*)$ /$1 break;
             proxy_pass http://localhost:7005;
+        }
+    
+        if ($first_subpath ~* command) {
+            rewrite ^/command/(.*)$ /$1 break;
+            proxy_pass http://localhost:7000;
+        }
+    
+        if ($first_subpath ~* rclone) {
+            rewrite ^/rclone/(.*)$ /$1 break;
+            proxy_pass http://localhost:7004;
         }
     
 
@@ -33,11 +48,38 @@ server {
     }
 
 
+    # sd_a111
+    location ~* ^/sd-a111/(.*)$ {
+        
+        rewrite ^/sd-a111/(.*) /$1 break;
+        proxy_pass http://localhost:7008;
+        
+    }
+    
+
     # sd_comfy
     location ~* ^/sd-comfy/(.*)$ {
         
         rewrite ^/sd-comfy/(.*) /$1 break;
         proxy_pass http://localhost:7005;
+        
+    }
+    
+
+    # command
+    location ~* ^/command/(.*)$ {
+        
+        rewrite ^/command/(.*) /$1 break;
+        proxy_pass http://localhost:7000;
+        
+    }
+    
+
+    # rclone
+    location ~* ^/rclone/(.*)$ {
+        
+        rewrite ^/rclone/(.*) /$1 break;
+        proxy_pass http://localhost:7004;
         
     }
     

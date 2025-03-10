@@ -1,10 +1,12 @@
 import os
 import argparse
 import yaml
+from pathlib import Path
 from jinja2 import Template
 
-current_path = os.path.dirname(os.path.abspath(__file__))
-script_output_path = f"{current_path}/../scripts"
+current_path = Path(__file__).parent.absolute()
+workspace_path = current_path.parent
+script_output_path = workspace_path / "scripts"
 
 target_files = {
     "control.j2": "control.sh",
@@ -16,14 +18,15 @@ target_files = {
 if __name__ == "__main__":
     # Parse command-line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--yaml_file", help="path to the YAML file")
+    parser.add_argument("--yaml_file", required=True, help="path to the YAML file")
     args = parser.parse_args()
         
     # Load the YAML file
     with open(args.yaml_file) as f:
         yaml_data = yaml.safe_load(f)
-        
-    output_path = os.path.join(script_output_path, yaml_data["path"])
+    
+    relative_path = Path(args.yaml_file).parent.resolve().relative_to(workspace_path/"configs")
+    output_path = script_output_path / relative_path / yaml_data["name"]
         
     # Load the YAML file as a Jinja2 template
     with open(args.yaml_file) as f:

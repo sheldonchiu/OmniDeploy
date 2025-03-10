@@ -1,6 +1,5 @@
 title: Stable Diffusion Comfy
 name: sd_comfy
-path: image/sd_comfy
 use_python: true
 python_version: 3.12
 expose: true

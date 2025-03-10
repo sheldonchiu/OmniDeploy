@@ -15,7 +15,7 @@ fi
 echo "Looking for YAML files in: ${YAML_DIR}"
 
 # Process all YAML files in the configs directory
-for yaml_file in "${YAML_DIR}"/*.yaml; do
+for yaml_file in "${YAML_DIR}"/**/*.yaml; do
     # Check if file exists and is a regular file
     if [[ -f "${yaml_file}" ]]; then
         filename=$(basename "${yaml_file}")
