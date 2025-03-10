@@ -48,4 +48,4 @@ setup_env: |-
   export PREPROCESS_REPO_DIR=/tmp/paperspace-sd-auto-preprocess
   export TRAINER_REPO_DIR=/tmp/kohya-trainer-paperspace
 
-  export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/stable-diffusion-models/"}
+  export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/models/"}

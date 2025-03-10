@@ -50,7 +50,7 @@ start: |-
   echo $! > /tmp/{{ name }}.pid
 
 setup_env: |-
-  export MODEL_DIR="$DATA_DIR/stable-diffusion-models"
+  export MODEL_DIR="$DATA_DIR/models"
   export REPO_DIR="$ROOT_REPO_DIR/stable-diffusion-forge"
 
   export {{ name|upper }}_PORT="{{ port }}"

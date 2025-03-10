@@ -36,7 +36,7 @@ start: |-
 
 export_required_env: ""
 setup_env: |-
-  export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/stable-diffusion-models"}
+  export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/models"}
   export REPO_DIR=${{ '{' ~ name|upper }}_REPO_DIR:-"$ROOT_REPO_DIR/StableSwarmUI"}
 
   export {{ name|upper }}_PORT=${{ '{' ~ name|upper }}_PORT:-"{{ port }}"}
