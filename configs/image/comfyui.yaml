@@ -1,5 +1,5 @@
-title: Stable Diffusion Comfy
-name: sd_comfy
+title: ComfyUI
+name: comfyui
 use_python: true
 python_version: "3.12"
 expose: true

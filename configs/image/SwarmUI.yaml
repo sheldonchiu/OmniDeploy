@@ -1,5 +1,5 @@
-title: Stable Diffusion Swarm
-name: sd_swarm
+title: SwarmUI
+name: swarmui
 use_python: true
 python_version: 3.10
 expose: true
@@ -7,7 +7,7 @@ port: 7016
 
 prepare_repo: |-
 
-  TARGET_REPO_URL="https://github.com/Stability-AI/StableSwarmUI.git" \
+  TARGET_REPO_URL="https://github.com/mcmonkeyprojects/SwarmUI.git" \
   TARGET_REPO_DIR=$REPO_DIR \
   TARGET_REPO_BRANCH="master" \
   UPDATE_REPO=${{ name|upper }}_UPDATE_REPO \

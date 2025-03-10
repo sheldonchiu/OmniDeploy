@@ -11,19 +11,19 @@ trap 'error_exit "### ERROR ###"' ERR
 echo "### Command received ###"
 file="/tmp/invokeai.pid"
 if [[ $1 == "reload" ]]; then
-    log "Reloading Stable Diffusion InvokeAI"
+    log "Reloading InvokeAI"
     
     kill_pid $file
     sleep 1
     bash main.sh
     
 elif [[ $1 == "start" ]]; then
-    log "Starting Stable Diffusion InvokeAI"
+    log "Starting InvokeAI"
     
     bash main.sh
     
 elif [[ $1 == "stop" ]]; then
-    log "Stopping Stable Diffusion InvokeAI"
+    log "Stopping InvokeAI"
         
     kill_pid $file
     

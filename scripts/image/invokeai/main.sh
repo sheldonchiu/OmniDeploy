@@ -9,8 +9,8 @@ source .env
 trap 'error_exit "### ERROR ###"' ERR
 
 
-echo "### Setting up Stable Diffusion InvokeAI ###"
-log "Setting up Stable Diffusion InvokeAI"
+echo "### Setting up InvokeAI ###"
+log "Setting up InvokeAI"
 if [[ "$REINSTALL_INVOKEAI" || ! -f "/tmp/invokeai.prepared" ]]; then
 
     mkdir -p $DATA_DIR/invokeai_models
@@ -44,24 +44,24 @@ else
     source $VENV_DIR/invokeai-env/bin/activate
     
 fi
-log "Finished Preparing Environment for Stable Diffusion InvokeAI"
+log "Finished Preparing Environment for InvokeAI"
 
 
 if [[ -z "$SKIP_MODEL_DOWNLOAD" ]]; then
-  echo "### Downloading Model for Stable Diffusion InvokeAI ###"
-  log "Downloading Model for Stable Diffusion InvokeAI"
+  echo "### Downloading Model for InvokeAI ###"
+  log "Downloading Model for InvokeAI"
   bash $current_dir/../utils/sd_model_download/main.sh
-  log "Finished Downloading Models for Stable Diffusion InvokeAI"
+  log "Finished Downloading Models for InvokeAI"
 else
-  log "Skipping Model Download for Stable Diffusion InvokeAI"
+  log "Skipping Model Download for InvokeAI"
 fi
 
 
 
 
 if [[ -z "$INSTALL_ONLY" ]]; then
-  echo "### Starting Stable Diffusion InvokeAI ###"
-  log "Starting Stable Diffusion InvokeAI"
+  echo "### Starting InvokeAI ###"
+  log "Starting InvokeAI"
   cd "$REPO_DIR"
   mkdir -p $ROOT_REPO_DIR/settings/invokeai
   PYTHONUNBUFFERED=1 service_loop "invokeai-web --config $current_dir/config.yaml \
@@ -70,7 +70,7 @@ if [[ -z "$INSTALL_ONLY" ]]; then
 fi
 
 
-send_to_discord "Stable Diffusion InvokeAI Started"
+send_to_discord "InvokeAI Started"
 
 if env | grep -q "PAPERSPACE"; then
   send_to_discord "Link: https://$PAPERSPACE_FQDN/invokeai/"

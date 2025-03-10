@@ -9,21 +9,21 @@ source .env
 trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Command received ###"
-file="/tmp/sd_comfy.pid"
+file="/tmp/swarmui.pid"
 if [[ $1 == "reload" ]]; then
-    log "Reloading Stable Diffusion Comfy"
+    log "Reloading SwarmUI"
     
     kill_pid $file
     sleep 1
     bash main.sh
     
 elif [[ $1 == "start" ]]; then
-    log "Starting Stable Diffusion Comfy"
+    log "Starting SwarmUI"
     
     bash main.sh
     
 elif [[ $1 == "stop" ]]; then
-    log "Stopping Stable Diffusion Comfy"
+    log "Stopping SwarmUI"
         
     kill_pid $file
     

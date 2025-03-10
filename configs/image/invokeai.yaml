@@ -1,4 +1,4 @@
-title: Stable Diffusion InvokeAI
+title: InvokeAI
 name: invokeai
 use_python: true
 python_version: "3.11"

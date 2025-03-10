@@ -33,9 +33,19 @@ server {
             proxy_pass http://localhost:7008;
         }
     
-        if ($first_subpath ~* sd-comfy) {
-            rewrite ^/sd-comfy/(.*)$ /$1 break;
+        if ($first_subpath ~* swarmui) {
+            rewrite ^/swarmui/(.*)$ /$1 break;
+            proxy_pass http://localhost:7016;
+        }
+    
+        if ($first_subpath ~* comfyui) {
+            rewrite ^/comfyui/(.*)$ /$1 break;
             proxy_pass http://localhost:7005;
+        }
+    
+        if ($first_subpath ~* invokeai) {
+            rewrite ^/invokeai/(.*)$ /$1 break;
+            proxy_pass http://localhost:7006;
         }
     
         if ($first_subpath ~* sd-fooocus) {
@@ -46,11 +56,6 @@ server {
         if ($first_subpath ~* sd-forge) {
             rewrite ^/sd-forge/(.*)$ /$1 break;
             proxy_pass http://localhost:7018;
-        }
-    
-        if ($first_subpath ~* invokeai) {
-            rewrite ^/invokeai/(.*)$ /$1 break;
-            proxy_pass http://localhost:7006;
         }
     
         if ($first_subpath ~* command) {
@@ -110,11 +115,29 @@ server {
     }
     
 
-    # sd_comfy
-    location ~* ^/sd-comfy/(.*)$ {
+    # swarmui
+    location ~* ^/swarmui/(.*)$ {
         
-        rewrite ^/sd-comfy/(.*) /$1 break;
+        rewrite ^/swarmui/(.*) /$1 break;
+        proxy_pass http://localhost:7016;
+        
+    }
+    
+
+    # comfyui
+    location ~* ^/comfyui/(.*)$ {
+        
+        rewrite ^/comfyui/(.*) /$1 break;
         proxy_pass http://localhost:7005;
+        
+    }
+    
+
+    # invokeai
+    location ~* ^/invokeai/(.*)$ {
+        
+        rewrite ^/invokeai/(.*) /$1 break;
+        proxy_pass http://localhost:7006;
         
     }
     
@@ -133,15 +156,6 @@ server {
         
         rewrite ^/sd-forge/(.*) /$1 break;
         proxy_pass http://localhost:7018;
-        
-    }
-    
-
-    # invokeai
-    location ~* ^/invokeai/(.*)$ {
-        
-        rewrite ^/invokeai/(.*) /$1 break;
-        proxy_pass http://localhost:7006;
         
     }
     
