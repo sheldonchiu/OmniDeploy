@@ -4,11 +4,11 @@ use_python: true
 expose: true
 port: 7000
 
-prepare_env: "pip install -r requirements.txt"
+prepare_env: "$UV_INSTALL_DIR/uv pip install -r requirements.txt"
 
 start: |-
   cd $current_dir/server
-  PYTHONUNBUFFERED=1 service_loop "python -m uvicorn main:app --host 0.0.0.0 --port {{ port }}" > $LOG_DIR/{{ name }}.log 2>&1 &
+  PYTHONUNBUFFERED=1 service_loop "python -m $UV_INSTALL_DIR/uvicorn main:app --host 0.0.0.0 --port {{ port }}" > $LOG_DIR/{{ name }}.log 2>&1 &
   echo $! > /tmp/{{ name }}.pid
 
   if [[ -n "${DISCORD_BOT}" ]]; then

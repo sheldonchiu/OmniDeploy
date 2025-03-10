@@ -27,7 +27,7 @@ if [[ "$REINSTALL_PREPROCESS" || ! -f "/tmp/preprocess.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.10 $VENV_DIR/preprocess-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/preprocess-env
     
     source $VENV_DIR/preprocess-env/bin/activate
     

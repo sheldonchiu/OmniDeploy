@@ -23,13 +23,13 @@ if [[ "$REINSTALL_MUSICGEN" || ! -f "/tmp/musicgen.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.1 $VENV_DIR/musicgen-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/musicgen-env
     
     source $VENV_DIR/musicgen-env/bin/activate
     
     cd $REPO_DIR
-    pip install 'torch>=2.0'
-    pip install -e .
+    $UV_INSTALL_DIR/uv pip install 'torch>=2.0'
+    $UV_INSTALL_DIR/uv pip install -e .
     
     touch /tmp/musicgen.prepared
 else

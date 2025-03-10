@@ -1,8 +1,6 @@
 #!/bin/bash
 # Don't exit on error
 
-export DEBIAN_FRONTEND=noninteractive
-
 function source_env_file() {
   if [[ -e ".env" ]]; then
     source ".env"
@@ -46,7 +44,6 @@ if [[ ! -f "/tmp/prepared" ]]; then
   # Install UV
   echo "Installing UV"
   curl -LsSf https://astral.sh/uv/0.6.5/install.sh | sh > /dev/null
-  source $HOME/.local/bin/env
 
   # Add alias to check the status of the web app
   chmod +x $WORKING_DIR/utils/status_check.py

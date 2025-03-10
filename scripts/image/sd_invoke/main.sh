@@ -13,33 +13,30 @@ echo "### Setting up Stable Diffusion InvokeAI ###"
 log "Setting up Stable Diffusion InvokeAI"
 if [[ "$REINSTALL_SD_INVOKE" || ! -f "/tmp/sd_invoke.prepared" ]]; then
 
-    mkdir -p $DATA_DIR/sd_invoke_models
+    mkdir -p $DATA_DIR/invokeai_models
     mkdir -p $INVOKEAI_ROOT/models
 
     symlinks=(
-      "$REPO_DIR/outputs:$IMAGE_OUTPUTS_DIR/stable-diffusion-invokeai"
-      "$MODEL_DIR:$WORKING_DIR/models"
-      "$MODEL_DIR/sd:$LINK_MODEL_TO"
-      "$MODEL_DIR/lora:$LINK_LORA_TO"
-      "$MODEL_DIR/controlnet:$LINK_CONTROLNET_TO"
-      "$MODEL_DIR/embedding:$LINK_EMBEDDING_TO"
-      "$MODEL_DIR/vae:$LINK_VAE_TO"
-      "$DATA_DIR/sd_invoke_models:$INVOKEAI_ROOT/models"
+      "$INVOKEAI_ROOT/outputs:$IMAGE_OUTPUTS_DIR/invokeai"
+      "$DATA_DIR/invokeai_models:$INVOKEAI_ROOT/models"
     )
     prepare_link "${symlinks[@]}"
     rm -rf $VENV_DIR/sd_invoke-env
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.1 $VENV_DIR/sd_invoke-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.11 $VENV_DIR/sd_invoke-env
     
     source $VENV_DIR/sd_invoke-env/bin/activate
     
-    apt-get install -qq build-essential -y > /dev/null
-    apt-get install -qq python3-opencv libopencv-dev -y > /dev/null
-    pip install pypatchmatch
+    if [[ "$INVOKEAI_INSTALL_PYPATCHMATCH" ]]; then
+      echo "Installing pypatchmatch"
+      apt-get install build-essential -y > /dev/null
+      apt-get install python3-opencv libopencv-dev -y > /dev/null
+      $UV_INSTALL_DIR/uv pip install pypatchmatch
+    fi
 
-    pip install "InvokeAI[xformers]" --use-pep517
+    $UV_INSTALL_DIR/uv pip install invokeai --index-url https://download.pytorch.org/whl/cu124
     invokeai-configure -y --skip-sd-weights
     
     touch /tmp/sd_invoke.prepared
@@ -67,11 +64,8 @@ if [[ -z "$INSTALL_ONLY" ]]; then
   echo "### Starting Stable Diffusion InvokeAI ###"
   log "Starting Stable Diffusion InvokeAI"
   cd "$REPO_DIR"
+  mkdir -p $ROOT_REPO_DIR/settings/invokeai
   PYTHONUNBUFFERED=1 service_loop "invokeai-web --port $SD_INVOKE_PORT \
-  --autoimport_dir $REPO_DIR/autoimport/main \
-  --lora_dir $REPO_DIR/autoimport/lora \
-  --embedding_dir $REPO_DIR/autoimport/embedding \
-  --controlnet_dir $REPO_DIR/autoimport/controlnet \
   ${EXTRA_SD_INVOKE_ARGS}" > $LOG_DIR/sd_invoke.log 2>&1 &
   echo $! > /tmp/sd_invoke.pid
 fi

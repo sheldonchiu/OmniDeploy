@@ -1,7 +1,7 @@
 title: Stable Diffusion Comfy
 name: sd_comfy
 use_python: true
-python_version: 3.12
+python_version: "3.12"
 expose: true
 port: 7005
 
@@ -17,8 +17,8 @@ prepare_env: |-
   python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.yaml $MODEL_DIR $REPO_DIR/models
 
   cd $REPO_DIR
-  pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
-  pip install -r requirements.txt
+  $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
+  $UV_INSTALL_DIR/uv pip install -r requirements.txt
 
   cd "$REPO_DIR/custom_nodes"
   if [[ ! -d "comfyui-manager" ]]; then
@@ -32,7 +32,8 @@ action_before_start: ""
 
 start: |-
   cd "$REPO_DIR"
-  PYTHONUNBUFFERED=1 service_loop "python main.py --dont-print-server --highvram --port ${{ name|upper }}_PORT ----user-directory $ROOT_REPO_DIR/settings ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
+  mkdir -p $ROOT_REPO_DIR/settings/comfyui
+  PYTHONUNBUFFERED=1 service_loop "python main.py --dont-print-server --highvram --port ${{ name|upper }}_PORT --user-directory $ROOT_REPO_DIR/settings/comfyui ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
   echo $! > /tmp/{{ name }}.pid
 
 export_required_env: ""

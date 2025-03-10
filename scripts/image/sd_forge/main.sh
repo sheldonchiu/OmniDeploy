@@ -35,12 +35,12 @@ if [[ "$REINSTALL_SD_FORGE" || ! -f "/tmp/sd_forge.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.1 $VENV_DIR/sd_forge-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/sd_forge-env
     
     source $VENV_DIR/sd_forge-env/bin/activate
     
-    pip install protobuf lxml
-    pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu124
+    $UV_INSTALL_DIR/uv pip install protobuf lxml
+    $UV_INSTALL_DIR/uv pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu124
 
     export PYTHONPATH="$PYTHONPATH:$REPO_DIR"
     # must run inside webui dir since env['PYTHONPATH'] = os.path.abspath(".") existing in launch.py
@@ -48,7 +48,7 @@ if [[ "$REINSTALL_SD_FORGE" || ! -f "/tmp/sd_forge.prepared" ]]; then
     python $current_dir/preinstall.py
     cd $current_dir
 
-    pip3 install -U xformers==0.0.28.post1 --index-url https://download.pytorch.org/whl/cu124
+    $UV_INSTALL_DIR/uv pip3 install -U xformers==0.0.28.post1 --index-url https://download.pytorch.org/whl/cu124
     
     touch /tmp/sd_forge.prepared
 else

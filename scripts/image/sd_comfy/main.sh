@@ -23,15 +23,15 @@ if [[ "$REINSTALL_SD_COMFY" || ! -f "/tmp/sd_comfy.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.12 $VENV_DIR/sd_comfy-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.12 $VENV_DIR/sd_comfy-env
     
     source $VENV_DIR/sd_comfy-env/bin/activate
     
     python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.yaml $MODEL_DIR $REPO_DIR/models
 
     cd $REPO_DIR
-    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
-    pip install -r requirements.txt
+    $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
+    $UV_INSTALL_DIR/uv pip install -r requirements.txt
 
     cd "$REPO_DIR/custom_nodes"
     if [[ ! -d "comfyui-manager" ]]; then
@@ -63,7 +63,8 @@ if [[ -z "$INSTALL_ONLY" ]]; then
   echo "### Starting Stable Diffusion Comfy ###"
   log "Starting Stable Diffusion Comfy"
   cd "$REPO_DIR"
-  PYTHONUNBUFFERED=1 service_loop "python main.py --dont-print-server --highvram --port $SD_COMFY_PORT ----user-directory $ROOT_REPO_DIR/settings ${EXTRA_SD_COMFY_ARGS}" > $LOG_DIR/sd_comfy.log 2>&1 &
+  mkdir -p $ROOT_REPO_DIR/settings/comfyui
+  PYTHONUNBUFFERED=1 service_loop "python main.py --dont-print-server --highvram --port $SD_COMFY_PORT --user-directory $ROOT_REPO_DIR/settings/comfyui ${EXTRA_SD_COMFY_ARGS}" > $LOG_DIR/sd_comfy.log 2>&1 &
   echo $! > /tmp/sd_comfy.pid
 fi
 

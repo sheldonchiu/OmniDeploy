@@ -40,15 +40,15 @@ if [[ "$REINSTALL_SD_FOOOCUS" || ! -f "/tmp/sd_fooocus.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.1 $VENV_DIR/sd_fooocus-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/sd_fooocus-env
     
     source $VENV_DIR/sd_fooocus-env/bin/activate
     
-    pip install pygit2 packaging
+    $UV_INSTALL_DIR/uv pip install pygit2 packaging
 
     cd $REPO_DIR
-    pip install torch==2.1.0 torchvision==0.16.0 --extra-index-url https://download.pytorch.org/whl/cu121
-    pip install -r requirements_versions.txt
+    $UV_INSTALL_DIR/uv pip install torch==2.1.0 torchvision==0.16.0 --extra-index-url https://download.pytorch.org/whl/cu121
+    $UV_INSTALL_DIR/uv pip install -r requirements_versions.txt
     
     touch /tmp/sd_fooocus.prepared
 else

@@ -18,9 +18,9 @@ if [[ "$REINSTALL_{{ name|upper }}" || ! -f "/tmp/{{ name }}.prepared" ]]; then
     {% if use_python %}
     echo "### Installing Python ###"
     {% if python_version %}
-    uv venv --seed --python {{ python_version }} $VENV_DIR/{{ name }}-env
+    $UV_INSTALL_DIR/uv venv --seed --python {{ python_version }} $VENV_DIR/{{ name }}-env
     {% else %}
-    uv venv --seed --python 3.10 $VENV_DIR/{{ name }}-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/{{ name }}-env
     {% endif %}
     source $VENV_DIR/{{ name }}-env/bin/activate
     {% endif %}

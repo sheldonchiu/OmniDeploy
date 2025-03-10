@@ -22,12 +22,12 @@ if [[ "$REINSTALL_IMAGE_BROWSER" || ! -f "/tmp/image_browser.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.10 $VENV_DIR/image_browser-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/image_browser-env
     
     source $VENV_DIR/image_browser-env/bin/activate
     
     cd $REPO_DIR
-    pip install -r requirements.txt
+    $UV_INSTALL_DIR/uv pip install -r requirements.txt
     
     touch /tmp/image_browser.prepared
 else

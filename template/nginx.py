@@ -17,21 +17,26 @@ if __name__ == "__main__":
     # Load the YAML file as a Jinja2 template
     data = []
     for file in yaml_files:
-        with open(file, 'r') as f:
+        # Load the YAML file
+        with open(file) as f:
             yaml_data = yaml.safe_load(f)
-            if "expose" in yaml_data and yaml_data['expose']:
-                if "name" not in yaml_data or "port" not in yaml_data:
-                    print("Missing name or port for " + file)
-                    continue
-                output = {"name": yaml_data["name"], "port": yaml_data["port"]}
-                output["nginx_override"] = (
-                    yaml_data["nginx_override"] if "nginx_override" in yaml_data else None
-                )
-                output["extra"] = (
-                    yaml_data["nginx_extra"] if "extra" in yaml_data else None
-                )
-                data.append(output)
-
+        # Load the YAML file as a Jinja2 template
+        with open(file) as f:
+            yaml_string = Template(f.read()).render(yaml_data)
+            yaml_data = yaml.safe_load(yaml_string)
+            
+        if "expose" in yaml_data and yaml_data['expose']:
+            if "name" not in yaml_data or "port" not in yaml_data:
+                print("Missing name or port for " + file)
+                continue
+            output = {"name": yaml_data["name"], "port": yaml_data["port"]}
+            output["nginx_override"] = (
+                yaml_data["nginx_override"] if "nginx_override" in yaml_data else None
+            )
+            output["nginx_extra"] = (
+                yaml_data["nginx_extra"] if "nginx_extra" in yaml_data else None
+            )
+            data.append(output)
 
     with open(os.path.join(current_path, 'nginx-site.j2')) as f:
         template = Template(f.read())

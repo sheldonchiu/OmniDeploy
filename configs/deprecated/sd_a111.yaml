@@ -2,7 +2,7 @@ title: Stable Diffusion WebUI
 name: sd_a111
 path: image/sd_a111
 use_python: true
-python_version: 3.10
+python_version: "3.10"
 expose: true
 port: 7008
 
@@ -37,7 +37,7 @@ prepare_repo: |-
 prepare_env: |-
   # fix install issue with pycairo, which is needed by sd-webui-controlnet
   apt-get install -y libcairo2-dev libjpeg-dev libgif-dev
-  pip uninstall -y torch torchvision torchaudio protobuf lxml
+  $UV_INSTALL_DIR/uv pip uninstall -y torch torchvision torchaudio protobuf lxml
 
   export PYTHONPATH="$PYTHONPATH:$REPO_DIR"
   # must run inside webui dir since env['PYTHONPATH'] = os.path.abspath(".") existing in launch.py
@@ -45,7 +45,7 @@ prepare_env: |-
   python $current_dir/preinstall.py
   cd $current_dir
 
-  pip install xformers
+  $UV_INSTALL_DIR/uv pip install xformers
 
 download_model: |-
   bash $current_dir/../utils/sd_model_download/main.sh

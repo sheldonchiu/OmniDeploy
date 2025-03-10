@@ -4,6 +4,6 @@ use_python: true
 expose: false
 
 prepare_repo: ""
-prepare_env: "pip install --upgrade huggingface_hub"
+prepare_env: "$UV_INSTALL_DIR/uv pip install --upgrade huggingface_hub"
 
 start: "python $current_dir/upload.py"

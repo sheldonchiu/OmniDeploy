@@ -43,13 +43,13 @@ if [[ "$REINSTALL_SD_A111" || ! -f "/tmp/sd_a111.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.1 $VENV_DIR/sd_a111-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/sd_a111-env
     
     source $VENV_DIR/sd_a111-env/bin/activate
     
     # fix install issue with pycairo, which is needed by sd-webui-controlnet
     apt-get install -y libcairo2-dev libjpeg-dev libgif-dev
-    pip uninstall -y torch torchvision torchaudio protobuf lxml
+    $UV_INSTALL_DIR/uv pip uninstall -y torch torchvision torchaudio protobuf lxml
 
     export PYTHONPATH="$PYTHONPATH:$REPO_DIR"
     # must run inside webui dir since env['PYTHONPATH'] = os.path.abspath(".") existing in launch.py
@@ -57,7 +57,7 @@ if [[ "$REINSTALL_SD_A111" || ! -f "/tmp/sd_a111.prepared" ]]; then
     python $current_dir/preinstall.py
     cd $current_dir
 
-    pip install xformers
+    $UV_INSTALL_DIR/uv pip install xformers
     
     touch /tmp/sd_a111.prepared
 else

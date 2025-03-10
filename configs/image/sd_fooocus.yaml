@@ -1,7 +1,7 @@
 title: Stable Diffusion Fooocus
 name: sd_fooocus
 use_python: true
-python_version: 3.10
+python_version: "3.10"
 expose: true
 port: 7015
 
@@ -31,11 +31,11 @@ prepare_repo: |-
   prepare_link  "${symlinks[@]}"
 
 prepare_env: |-
-  pip install pygit2 packaging
+  $UV_INSTALL_DIR/uv pip install pygit2 packaging
 
   cd $REPO_DIR
-  pip install torch==2.1.0 torchvision==0.16.0 --extra-index-url https://download.pytorch.org/whl/cu121
-  pip install -r requirements_versions.txt
+  $UV_INSTALL_DIR/uv pip install torch==2.1.0 torchvision==0.16.0 --extra-index-url https://download.pytorch.org/whl/cu121
+  $UV_INSTALL_DIR/uv pip install -r requirements_versions.txt
 
 download_model: |-
   bash $current_dir/../utils/sd_model_download/main.sh

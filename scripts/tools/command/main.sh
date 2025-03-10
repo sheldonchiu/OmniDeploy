@@ -18,11 +18,11 @@ if [[ "$REINSTALL_COMMAND" || ! -f "/tmp/command.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.10 $VENV_DIR/command-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/command-env
     
     source $VENV_DIR/command-env/bin/activate
     
-    pip install -r requirements.txt
+    $UV_INSTALL_DIR/uv pip install -r requirements.txt
     
     touch /tmp/command.prepared
 else
@@ -40,7 +40,7 @@ if [[ -z "$INSTALL_ONLY" ]]; then
   echo "### Starting Command Server ###"
   log "Starting Command Server"
   cd $current_dir/server
-  PYTHONUNBUFFERED=1 service_loop "python -m uvicorn main:app --host 0.0.0.0 --port 7000" > $LOG_DIR/command.log 2>&1 &
+  PYTHONUNBUFFERED=1 service_loop "python -m $UV_INSTALL_DIR/uvicorn main:app --host 0.0.0.0 --port 7000" > $LOG_DIR/command.log 2>&1 &
   echo $! > /tmp/command.pid
 
   if [[ -n "${DISCORD_BOT}" ]]; then

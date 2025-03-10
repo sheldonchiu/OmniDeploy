@@ -43,13 +43,8 @@ server {
         {% endif %}
     }
     {% if item['nginx_extra'] %}
-    {{ nginx_extra }}
+    {{ item['nginx_extra'] }}
     {% endif %}
 {% endfor %}
-
-    # sd image browser
-    location /infinite_image_browsing {
-        proxy_pass http://localhost:7002/infinite_image_browsing;
-    }
 
 }

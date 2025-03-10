@@ -1,7 +1,7 @@
 title: Musicgen
 name: musicgen
 use_python: true
-python_version: 3.10
+python_version: "3.10"
 expose: true
 port: 7003
 
@@ -15,8 +15,8 @@ prepare_repo: |-
 
 prepare_env: |-
   cd $REPO_DIR
-  pip install 'torch>=2.0'
-  pip install -e .
+  $UV_INSTALL_DIR/uv pip install 'torch>=2.0'
+  $UV_INSTALL_DIR/uv pip install -e .
 
 download_model: ""
 

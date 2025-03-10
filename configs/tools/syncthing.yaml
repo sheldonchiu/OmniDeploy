@@ -1,0 +1,32 @@
+title: Syncthing
+name: syncthing
+use_python: False
+expose: true
+port: 7019
+
+
+prepare_env: |-
+  cd /tmp
+  curl -L https://github.com/syncthing/syncthing/releases/download/v1.29.2/syncthing-linux-amd64-v1.29.2.tar.gz | tar -xz
+  mv syncthing-linux-amd64-v1.29.2/syncthing $VENV_DIR/bin
+
+start: |-
+  auth=""
+  if [[ -n "$SYNCTHING_USER" && -n "$SYNCTHING_PASSWORD" ]]; then
+    user_arg="--gui-user=$SYNCTHING_USER --gui-password=$SYNCTHING_PASSWORD"
+  fi
+  $VENV_DIR/bin/syncthing --no-browser --home $ROOT_REPO_DIR/settings/syncthing --gui-address=0.0.0.0:7019 $user_arg
+
+setup_env: ""
+
+
+nginx_override: |-
+  proxy_set_header        Host $host;
+  proxy_set_header        X-Real-IP $remote_addr;
+  proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header        X-Forwarded-Proto $scheme;
+
+  proxy_pass              http://localhost:{{ port }}/;
+
+  proxy_read_timeout      600s;
+  proxy_send_timeout      600s;

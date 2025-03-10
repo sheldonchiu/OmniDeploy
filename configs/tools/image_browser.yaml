@@ -13,7 +13,7 @@ prepare_repo: |-
 
 prepare_env: |-
   cd $REPO_DIR
-  pip install -r requirements.txt
+  $UV_INSTALL_DIR/uv pip install -r requirements.txt
 
 action_before_start: |-
   if [[ -n "${IMAGE_BROWSER_KEY}" ]]; then
@@ -47,3 +47,8 @@ setup_env: |-
 nginx_override: |-
   absolute_redirect off;
   return 301 /infinite_image_browsing;
+
+nginx_extra: |-
+  location /infinite_image_browsing {
+      proxy_pass http://localhost:7002/infinite_image_browsing;
+    }

@@ -18,11 +18,11 @@ if [[ "$REINSTALL_HUGGINGFACE" || ! -f "/tmp/huggingface.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    uv venv --seed --python 3.10 $VENV_DIR/huggingface-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.10 $VENV_DIR/huggingface-env
     
     source $VENV_DIR/huggingface-env/bin/activate
     
-    pip install --upgrade huggingface_hub
+    $UV_INSTALL_DIR/uv pip install --upgrade huggingface_hub
     
     touch /tmp/huggingface.prepared
 else

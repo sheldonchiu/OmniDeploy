@@ -21,16 +21,16 @@ prepare_repo: |-
 prepare_env: |-
   cd $REPO_DIR/kosmos-2
 
-  pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
-  pip install xformers==0.0.16
-  pip install protobuf==3.20.3 pytorch-extension
+  $UV_INSTALL_DIR/uv pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
+  $UV_INSTALL_DIR/uv pip install xformers==0.0.16
+  $UV_INSTALL_DIR/uv pip install protobuf==3.20.3 pytorch-extension
 
-  pip install fairseq/
-  pip install infinibatch/
-  pip install torchscale/
-  pip install open_clip/
-  pip install  git+https://github.com/microsoft/DeepSpeed.git@jeffra/engine-xthru-v2
-  pip install numpy==1.23.0 scipy==1.8.0 tiktoken \
+  $UV_INSTALL_DIR/uv pip install fairseq/
+  $UV_INSTALL_DIR/uv pip install infinibatch/
+  $UV_INSTALL_DIR/uv pip install torchscale/
+  $UV_INSTALL_DIR/uv pip install open_clip/
+  $UV_INSTALL_DIR/uv pip install  git+https://github.com/microsoft/DeepSpeed.git@jeffra/engine-xthru-v2
+  $UV_INSTALL_DIR/uv pip install numpy==1.23.0 scipy==1.8.0 tiktoken \
    ftfy sentencepiece==0.1.99 httpcore==0.17.3 \
    gradio==3.37.0 spacy==3.6.0 thinc==8.1.10 \
    pydantic==1.10.11 opencv-python-headless==4.8.0.74 \
@@ -43,23 +43,23 @@ prepare_env: |-
   gpu_name=$(echo $gpu_name | sed 's/ //g')
   case $gpu_name in
     *A4000*)
-      pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation  .
+      $UV_INSTALL_DIR/uv pip install -v --disable-$UV_INSTALL_DIR/uv pip-version-check --no-cache-dir --no-build-isolation  .
       wget -q https://huggingface.co/sheldonxxxx/apex-paperspace-binary/resolve/main/apex_a4000.tar.gz
       tar -xzf apex_a4000.tar.gz -C $VENV_DIR/{{ name }}-env/lib/python3.9/site-packages/
       ;;
     *P5000*)
-      pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation  .
+      $UV_INSTALL_DIR/uv pip install -v --disable-$UV_INSTALL_DIR/uv pip-version-check --no-cache-dir --no-build-isolation  .
       wget -q https://huggingface.co/sheldonxxxx/apex-paperspace-binary/resolve/main/apex_p5000.tar.gz
       tar -xzf apex_p5000.tar.gz -C $VENV_DIR/{{ name }}-env/lib/python3.9/site-packages/
       ;;
     *RTX5000*)
-      pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation  .
+      $UV_INSTALL_DIR/uv pip install -v --disable-$UV_INSTALL_DIR/uv pip-version-check --no-cache-dir --no-build-isolation  .
       wget -q https://huggingface.co/sheldonxxxx/apex-paperspace-binary/resolve/main/apex_rtx5000.tar.gz
       tar -xzf apex_rtx5000.tar.gz -C $VENV_DIR/{{ name }}-env/lib/python3.9/site-packages/
       ;;
     *)
       echo "No apex binary for $gpu_name, building from source"
-      pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
+      $UV_INSTALL_DIR/uv pip install -v --disable-$UV_INSTALL_DIR/uv pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
       ;;
   esac
   cd $REPO_DIR
