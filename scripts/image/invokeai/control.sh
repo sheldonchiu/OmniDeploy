@@ -9,7 +9,7 @@ source .env
 trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Command received ###"
-file="/tmp/sd_invoke.pid"
+file="/tmp/invokeai.pid"
 if [[ $1 == "reload" ]]; then
     log "Reloading Stable Diffusion InvokeAI"
     

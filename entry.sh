@@ -45,9 +45,19 @@ if [[ ! -f "/tmp/prepared" ]]; then
   echo "Installing UV"
   curl -LsSf https://astral.sh/uv/0.6.5/install.sh | sh > /dev/null
 
+  # install gum
+  mkdir -p /etc/apt/keyrings
+  curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
+  apt-get -qq update && apt-get install gum > /dev/null
+
   # Add alias to check the status of the web app
+  chmod +x $WORKING_DIR/utils/script_runner.sh
   chmod +x $WORKING_DIR/utils/status_check.py
-  echo "alias status='watch -n 1 /$WORKING_DIR/utils/status_check.py'" >> ~/.bashrc
+  echo "alias status='watch -n 1 $WORKING_DIR/utils/status_check.py'" >> ~/.bashrc
+  echo "alias gui='bash $WORKING_DIR/utils/script_runner.sh'" >> ~/.bashrc
+  source ~/.bashrc
+
 
   # Use Nginx to expose web app
   echo "Installing Nginx"

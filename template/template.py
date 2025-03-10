@@ -47,3 +47,8 @@ if __name__ == "__main__":
         # Write the output to the output file
         with open(os.path.join(output_path, output_filename), 'w') as f:
             f.write(result)
+            
+        if "extra_files"in yaml_data:
+            for file, content in yaml_data["extra_files"].items():
+                with open(os.path.join(output_path, file), 'w') as f:
+                    f.write(content)

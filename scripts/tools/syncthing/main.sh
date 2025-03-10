@@ -16,8 +16,9 @@ if [[ "$REINSTALL_SYNCTHING" || ! -f "/tmp/syncthing.prepared" ]]; then
     
     rm -rf $VENV_DIR/syncthing-env
     
-    cd $VENV_DIR/bin
+    cd /tmp
     curl -L https://github.com/syncthing/syncthing/releases/download/v1.29.2/syncthing-linux-amd64-v1.29.2.tar.gz | tar -xz
+    mv syncthing-linux-amd64-v1.29.2/syncthing $VENV_DIR/bin
     
     touch /tmp/syncthing.prepared
 else
@@ -34,7 +35,11 @@ log "Finished Preparing Environment for Syncthing"
 if [[ -z "$INSTALL_ONLY" ]]; then
   echo "### Starting Syncthing ###"
   log "Starting Syncthing"
-  $VENV_DIR/bin/syncthing --no-browser --home $ROOT_REPO_DIR/settings/syncthing --gui-address=0.0.0.0:7019
+  auth=""
+  if [[ -n "$SYNCTHING_USER" && -n "$SYNCTHING_PASSWORD" ]]; then
+    user_arg="--gui-user=$SYNCTHING_USER --gui-password=$SYNCTHING_PASSWORD"
+  fi
+  $VENV_DIR/bin/syncthing --no-browser --home $ROOT_REPO_DIR/settings/syncthing --gui-address=0.0.0.0:7019 $user_arg
 fi
 
 

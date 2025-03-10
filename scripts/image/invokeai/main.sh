@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Stable Diffusion InvokeAI ###"
 log "Setting up Stable Diffusion InvokeAI"
-if [[ "$REINSTALL_SD_INVOKE" || ! -f "/tmp/sd_invoke.prepared" ]]; then
+if [[ "$REINSTALL_INVOKEAI" || ! -f "/tmp/invokeai.prepared" ]]; then
 
     mkdir -p $DATA_DIR/invokeai_models
     mkdir -p $INVOKEAI_ROOT/models
@@ -21,13 +21,13 @@ if [[ "$REINSTALL_SD_INVOKE" || ! -f "/tmp/sd_invoke.prepared" ]]; then
       "$DATA_DIR/invokeai_models:$INVOKEAI_ROOT/models"
     )
     prepare_link "${symlinks[@]}"
-    rm -rf $VENV_DIR/sd_invoke-env
+    rm -rf $VENV_DIR/invokeai-env
     
     echo "### Installing Python ###"
     
-    $UV_INSTALL_DIR/uv venv --seed --python 3.11 $VENV_DIR/sd_invoke-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.11 $VENV_DIR/invokeai-env
     
-    source $VENV_DIR/sd_invoke-env/bin/activate
+    source $VENV_DIR/invokeai-env/bin/activate
     
     if [[ "$INVOKEAI_INSTALL_PYPATCHMATCH" ]]; then
       echo "Installing pypatchmatch"
@@ -36,13 +36,12 @@ if [[ "$REINSTALL_SD_INVOKE" || ! -f "/tmp/sd_invoke.prepared" ]]; then
       $UV_INSTALL_DIR/uv pip install pypatchmatch
     fi
 
-    $UV_INSTALL_DIR/uv pip install invokeai --index-url https://download.pytorch.org/whl/cu124
-    invokeai-configure -y --skip-sd-weights
+    $UV_INSTALL_DIR/uv pip install invokeai --index https://download.pytorch.org/whl/cu124
     
-    touch /tmp/sd_invoke.prepared
+    touch /tmp/invokeai.prepared
 else
     
-    source $VENV_DIR/sd_invoke-env/bin/activate
+    source $VENV_DIR/invokeai-env/bin/activate
     
 fi
 log "Finished Preparing Environment for Stable Diffusion InvokeAI"
@@ -65,22 +64,22 @@ if [[ -z "$INSTALL_ONLY" ]]; then
   log "Starting Stable Diffusion InvokeAI"
   cd "$REPO_DIR"
   mkdir -p $ROOT_REPO_DIR/settings/invokeai
-  PYTHONUNBUFFERED=1 service_loop "invokeai-web --port $SD_INVOKE_PORT \
-  ${EXTRA_SD_INVOKE_ARGS}" > $LOG_DIR/sd_invoke.log 2>&1 &
-  echo $! > /tmp/sd_invoke.pid
+  PYTHONUNBUFFERED=1 service_loop "invokeai-web --config $current_dir/config.yaml \
+  ${EXTRA_INVOKEAI_ARGS}" > $LOG_DIR/invokeai.log 2>&1 &
+  echo $! > /tmp/invokeai.pid
 fi
 
 
 send_to_discord "Stable Diffusion InvokeAI Started"
 
 if env | grep -q "PAPERSPACE"; then
-  send_to_discord "Link: https://$PAPERSPACE_FQDN/sd-invoke/"
+  send_to_discord "Link: https://$PAPERSPACE_FQDN/invokeai/"
 fi
 
 
 if [[ -n "${CF_TOKEN}" ]]; then
-  if [[ "$RUN_SCRIPT" != *"sd_invoke"* ]]; then
-    export RUN_SCRIPT="$RUN_SCRIPT,sd_invoke"
+  if [[ "$RUN_SCRIPT" != *"invokeai"* ]]; then
+    export RUN_SCRIPT="$RUN_SCRIPT,invokeai"
   fi
   bash $WORKING_DIR/utils/cloudflare_reload.sh
 fi

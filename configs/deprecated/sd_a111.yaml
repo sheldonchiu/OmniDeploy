@@ -73,3 +73,10 @@ setup_env: |-
   export LINK_LORA_TO=${{ '{' ~ name|upper }}_LINK_LORA_TO:-"${REPO_DIR}/models/Lora"}
   export LINK_CONTROLNET_TO=${{ '{' ~ name|upper }}_LINK_CONTROLNET_TO:-"${REPO_DIR}/extensions/sd-webui-controlnet/models"}
   export LINK_EMBEDDING_TO=${{ '{' ~ name|upper }}_LINK_EMBEDDING_TO:-"${REPO_DIR}/embeddings"}
+
+extra_files:
+  preinstall.py: |-
+    # Import launch.py which will automatically run the install script but not launch the WebUI.
+    import launch
+    launch.prepare_environment()
+    print("Finished {{ title }} preinstall")

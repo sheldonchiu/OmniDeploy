@@ -27,7 +27,7 @@ if [[ "$REINSTALL_SD_COMFY" || ! -f "/tmp/sd_comfy.prepared" ]]; then
     
     source $VENV_DIR/sd_comfy-env/bin/activate
     
-    python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.yaml $MODEL_DIR $REPO_DIR/models
+    python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
 
     cd $REPO_DIR
     $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126

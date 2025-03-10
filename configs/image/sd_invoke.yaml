@@ -1,5 +1,5 @@
 title: Stable Diffusion InvokeAI
-name: sd_invoke
+name: invokeai
 use_python: true
 python_version: "3.11"
 expose: true
@@ -23,8 +23,7 @@ prepare_env: |-
     $UV_INSTALL_DIR/uv pip install pypatchmatch
   fi
 
-  $UV_INSTALL_DIR/uv pip install invokeai --index-url https://download.pytorch.org/whl/cu124
-  invokeai-configure -y --skip-sd-weights
+  $UV_INSTALL_DIR/uv pip install invokeai --index https://download.pytorch.org/whl/cu124
 
 download_model: |-
   bash $current_dir/../utils/sd_model_download/main.sh
@@ -34,7 +33,7 @@ action_before_start: ""
 start: |-
   cd "$REPO_DIR"
   mkdir -p $ROOT_REPO_DIR/settings/invokeai
-  PYTHONUNBUFFERED=1 service_loop "invokeai-web --port ${{ name|upper }}_PORT \
+  PYTHONUNBUFFERED=1 service_loop "invokeai-web --config $current_dir/config.yaml \
   ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
   echo $! > /tmp/{{ name }}.pid
 
@@ -51,4 +50,12 @@ setup_env: |-
   export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
   export HUGGINGFACE_TOKEN=$HF_TOKEN
 
+extra_files:
+  config.yaml: |-
+    # Internal metadata - do not edit:
+    schema_version: 4.0.2
+
+    # Put user settings here - see https://invoke-ai.github.io/InvokeAI/configuration/:
+    enable_partial_loading: true
+    pytorch_cuda_alloc_conf: "backend:cudaMallocAsync"
   
