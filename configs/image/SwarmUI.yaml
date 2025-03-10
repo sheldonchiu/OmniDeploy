@@ -1,7 +1,7 @@
 title: SwarmUI
 name: swarmui
 use_python: true
-python_version: 3.10
+python_version: "3.11"
 expose: true
 port: 7016
 
@@ -14,31 +14,24 @@ prepare_repo: |-
   UPDATE_REPO_COMMIT=${{ name|upper }}_UPDATE_REPO_COMMIT \
   prepare_repo 
 
-  symlinks=(
-      "$REPO_DIR/outputs:$IMAGE_OUTPUTS_DIR/stable-diffusion-swarm"
-      "$MODEL_DIR:$WORKING_DIR/models"
-      "$MODEL_DIR/sd:$LINK_MODEL_TO"
-      "$MODEL_DIR/lora:$LINK_LORA_TO"
-      "$MODEL_DIR/vae:$LINK_VAE_TO"
-      "$MODEL_DIR/hypernetwork:$LINK_HYPERNETWORK_TO"
-      "$MODEL_DIR/controlnet:$LINK_CONTROLNET_TO"
-      "$MODEL_DIR/embedding:$LINK_EMBEDDING_TO"
-      "$MODEL_DIR/clip_vision:$LINK_CLIP_TO"
-  )
-  prepare_link  "${symlinks[@]}"
 
 prepare_env: |-
+  python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
+
   apt-get update -qq
   apt-get install -qq -y dotnet-sdk-8.0
 
+  $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
+
 download_model: |-
-  bash $current_dir/../utils/sd_model_download/main.sh
+  bash $WORKING_DIR/utils/sd_model_download/main.sh
 
 action_before_start: ""
 
 start: |-
   cd $REPO_DIR
-  service_loop "bash launch-linux.sh --port {{ port }} --launch_mode none ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
+  mkdir $ROOT_REPO_DIR/settings/{{ name }}
+  service_loop "bash launch-linux.sh --data_dir $ROOT_REPO_DIR/settings/{{ name }} --port {{ port }} --launch_mode none ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
   echo $! > /tmp/{{ name }}.pid
 
 export_required_env: ""
@@ -49,12 +42,26 @@ setup_env: |-
   export {{ name|upper }}_PORT=${{ '{' ~ name|upper }}_PORT:-"{{ port }}"}
   export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
   export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
-
-  export LINK_MODEL_TO=${{ '{' ~ name|upper }}_LINK_MODEL_TO:-"${REPO_DIR}/Models/Stable-Diffusion"}
-  export LINK_VAE_TO=${{ '{' ~ name|upper }}_LINK_VAE_TO:-"${REPO_DIR}/Models/VAE"}
-  export LINK_HYPERNETWORK_TO=${{ '{' ~ name|upper }}_LINK_HYPERNETWORK_TO:-"${REPO_DIR}/Models/hypernetworks"}
-  export LINK_LORA_TO=${{ '{' ~ name|upper }}_LINK_LORA_TO:-"${REPO_DIR}/Models/Lora"}
-  export LINK_CONTROLNET_TO=${{ '{' ~ name|upper }}_LINK_CONTROLNET_TO:-"${REPO_DIR}/Models/controlnet"}
-  export LINK_EMBEDDING_TO=${{ '{' ~ name|upper }}_LINK_EMBEDDING_TO:-"${REPO_DIR}/Models/Embeddings"}
-  export LINK_CLIP_TO=${{ '{' ~ name|upper }}_LINK_CLIP_TO:-"${REPO_DIR}/Models/clip_vision"}
   
+extra_files:
+  folder_mapping.json: |-
+    {
+      "Stable-Diffusion": "StableDiffusion",
+      "VAE": "VAE",
+      "Lora": [
+        "Lora",
+        "LyCORIS"
+      ],
+      "upscale_models": [
+        "ESRGAN",
+        "RealESRGAN",
+        "SwinIR"
+      ],
+      "Embeddings": "TextualInversion",
+      "controlnet": [
+        "ControlNet",
+        "T2IAdapter"
+      ],
+      "clip": "TextEncoder",
+      "diffusion_models": "Unet"
+    }

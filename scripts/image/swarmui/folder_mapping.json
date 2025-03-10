@@ -1,0 +1,20 @@
+{
+  "Stable-Diffusion": "StableDiffusion",
+  "VAE": "VAE",
+  "Lora": [
+    "Lora",
+    "LyCORIS"
+  ],
+  "upscale_models": [
+    "ESRGAN",
+    "RealESRGAN",
+    "SwinIR"
+  ],
+  "Embeddings": "TextualInversion",
+  "controlnet": [
+    "ControlNet",
+    "T2IAdapter"
+  ],
+  "clip": "TextEncoder",
+  "diffusion_models": "Unet"
+}

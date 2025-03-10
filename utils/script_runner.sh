@@ -4,6 +4,9 @@
 
 set -e  # Exit on error
 
+DIR=$(dirname "$(realpath "$0")")
+cd $DIR/..
+
 # Colors for output
 GREEN="\033[0;32m"
 BLUE="\033[0;34m"

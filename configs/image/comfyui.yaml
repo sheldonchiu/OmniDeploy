@@ -32,8 +32,8 @@ action_before_start: ""
 
 start: |-
   cd "$REPO_DIR"
-  mkdir -p $ROOT_REPO_DIR/settings/comfyui
-  PYTHONUNBUFFERED=1 service_loop "python main.py --dont-print-server --highvram --port ${{ name|upper }}_PORT --user-directory $ROOT_REPO_DIR/settings/comfyui ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
+  mkdir -p $ROOT_REPO_DIR/settings/{{ name }}
+  PYTHONUNBUFFERED=1 service_loop "python main.py --dont-print-server --highvram --port ${{ name|upper }}_PORT --user-directory $ROOT_REPO_DIR/settings/{{ name }} ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
   echo $! > /tmp/{{ name }}.pid
 
 export_required_env: ""

@@ -20,29 +20,20 @@ if [[ "$REINSTALL_SWARMUI" || ! -f "/tmp/swarmui.prepared" ]]; then
     UPDATE_REPO=$SWARMUI_UPDATE_REPO \
     UPDATE_REPO_COMMIT=$SWARMUI_UPDATE_REPO_COMMIT \
     prepare_repo 
-
-    symlinks=(
-        "$REPO_DIR/outputs:$IMAGE_OUTPUTS_DIR/stable-diffusion-swarm"
-        "$MODEL_DIR:$WORKING_DIR/models"
-        "$MODEL_DIR/sd:$LINK_MODEL_TO"
-        "$MODEL_DIR/lora:$LINK_LORA_TO"
-        "$MODEL_DIR/vae:$LINK_VAE_TO"
-        "$MODEL_DIR/hypernetwork:$LINK_HYPERNETWORK_TO"
-        "$MODEL_DIR/controlnet:$LINK_CONTROLNET_TO"
-        "$MODEL_DIR/embedding:$LINK_EMBEDDING_TO"
-        "$MODEL_DIR/clip_vision:$LINK_CLIP_TO"
-    )
-    prepare_link  "${symlinks[@]}"
     rm -rf $VENV_DIR/swarmui-env
     
     echo "### Installing Python ###"
     
-    $UV_INSTALL_DIR/uv venv --seed --python 3.1 $VENV_DIR/swarmui-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.11 $VENV_DIR/swarmui-env
     
     source $VENV_DIR/swarmui-env/bin/activate
     
+    python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
+
     apt-get update -qq
     apt-get install -qq -y dotnet-sdk-8.0
+
+    $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
     
     touch /tmp/swarmui.prepared
 else
@@ -56,7 +47,7 @@ log "Finished Preparing Environment for SwarmUI"
 if [[ -z "$SKIP_MODEL_DOWNLOAD" ]]; then
   echo "### Downloading Model for SwarmUI ###"
   log "Downloading Model for SwarmUI"
-  bash $current_dir/../utils/sd_model_download/main.sh
+  bash $WORKING_DIR/utils/sd_model_download/main.sh
   log "Finished Downloading Models for SwarmUI"
 else
   log "Skipping Model Download for SwarmUI"
@@ -69,7 +60,8 @@ if [[ -z "$INSTALL_ONLY" ]]; then
   echo "### Starting SwarmUI ###"
   log "Starting SwarmUI"
   cd $REPO_DIR
-  service_loop "bash launch-linux.sh --port 7016 --launch_mode none ${EXTRA_SWARMUI_ARGS}" > $LOG_DIR/swarmui.log 2>&1 &
+  mkdir $ROOT_REPO_DIR/settings/swarmui
+  service_loop "bash launch-linux.sh --data_dir $ROOT_REPO_DIR/settings/swarmui --port 7016 --launch_mode none ${EXTRA_SWARMUI_ARGS}" > $LOG_DIR/swarmui.log 2>&1 &
   echo $! > /tmp/swarmui.pid
 fi
 
