@@ -32,6 +32,7 @@ source_env_file
 mkdir -p $DATA_DIR
 mkdir -p $WORKING_DIR
 mkdir -p $ROOT_REPO_DIR
+mkdir -p $ROOT_REPO_DIR/settings
 mkdir -p $VENV_DIR
 mkdir -p $LOG_DIR
 
