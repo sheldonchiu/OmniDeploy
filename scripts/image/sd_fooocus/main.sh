@@ -38,13 +38,11 @@ if [[ "$REINSTALL_SD_FOOOCUS" || ! -f "/tmp/sd_fooocus.prepared" ]]; then
     prepare_link  "${symlinks[@]}"
     rm -rf $VENV_DIR/sd_fooocus-env
     
+    echo "### Installing Python ###"
     
-    python3.10 -m venv $VENV_DIR/sd_fooocus-env
+    uv venv --seed --python 3.1 $VENV_DIR/sd_fooocus-env
     
     source $VENV_DIR/sd_fooocus-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     pip install pygit2 packaging
 

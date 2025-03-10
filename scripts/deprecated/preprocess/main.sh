@@ -25,13 +25,11 @@ if [[ "$REINSTALL_PREPROCESS" || ! -f "/tmp/preprocess.prepared" ]]; then
     prepare_repo  
     rm -rf $VENV_DIR/preprocess-env
     
+    echo "### Installing Python ###"
     
-    python3 -m venv /tmp/preprocess-env
+    uv venv --seed --python 3.10 $VENV_DIR/preprocess-env
     
     source $VENV_DIR/preprocess-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     cd $PREPROCESS_REPO_DIR/preprocess
     bash prepare_env.sh

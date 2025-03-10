@@ -16,13 +16,11 @@ if [[ "$REINSTALL_COMMAND" || ! -f "/tmp/command.prepared" ]]; then
     
     rm -rf $VENV_DIR/command-env
     
+    echo "### Installing Python ###"
     
-    python3 -m venv /tmp/command-env
+    uv venv --seed --python 3.10 $VENV_DIR/command-env
     
     source $VENV_DIR/command-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     pip install -r requirements.txt
     

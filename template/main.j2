@@ -16,24 +16,13 @@ if [[ "$REINSTALL_{{ name|upper }}" || ! -f "/tmp/{{ name }}.prepared" ]]; then
     {% if prepare_repo %}{{ prepare_repo | indent(4)}}{% endif %}
     rm -rf $VENV_DIR/{{ name }}-env
     {% if use_python %}
+    echo "### Installing Python ###"
     {% if python_version %}
-    echo "### Installing Python {{ python_version }} ###"
-    apt-get install -y software-properties-common > /dev/null
-    add-apt-repository -y ppa:deadsnakes/ppa
-    apt-get update -qq
-    apt-get install -y python{{ python_version }} \
-     python{{ python_version }}-venv \
-     python{{ python_version }}-dev \
-     python{{ python_version }}-tk > /dev/null
-
-    python{{ python_version }} -m venv $VENV_DIR/{{ name }}-env
+    uv venv --seed --python {{ python_version }} $VENV_DIR/{{ name }}-env
     {% else %}
-    python3 -m venv /tmp/{{ name }}-env
+    uv venv --seed --python 3.10 $VENV_DIR/{{ name }}-env
     {% endif %}
     source $VENV_DIR/{{ name }}-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     {% endif %}
     {{ prepare_env | indent(4)}}
     

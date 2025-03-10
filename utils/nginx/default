@@ -18,6 +18,16 @@ server {
     # jupyter lab
     location / {
     
+        if ($first_subpath ~* kosmos2) {
+            rewrite ^/kosmos2/(.*)$ /$1 break;
+            proxy_pass http://localhost:7014;
+        }
+    
+        if ($first_subpath ~* musicgen) {
+            rewrite ^/musicgen/(.*)$ /$1 break;
+            proxy_pass http://localhost:7003;
+        }
+    
         if ($first_subpath ~* sd-a111) {
             rewrite ^/sd-a111/(.*)$ /$1 break;
             proxy_pass http://localhost:7008;
@@ -28,9 +38,29 @@ server {
             proxy_pass http://localhost:7005;
         }
     
+        if ($first_subpath ~* sd-fooocus) {
+            rewrite ^/sd-fooocus/(.*)$ /$1 break;
+            proxy_pass http://localhost:7015;
+        }
+    
+        if ($first_subpath ~* sd-forge) {
+            rewrite ^/sd-forge/(.*)$ /$1 break;
+            proxy_pass http://localhost:7018;
+        }
+    
+        if ($first_subpath ~* sd-invoke) {
+            rewrite ^/sd-invoke/(.*)$ /$1 break;
+            proxy_pass http://localhost:7006;
+        }
+    
         if ($first_subpath ~* command) {
             rewrite ^/command/(.*)$ /$1 break;
             proxy_pass http://localhost:7000;
+        }
+    
+        if ($first_subpath ~* image-browser) {
+            rewrite ^/image-browser/(.*)$ /$1 break;
+            proxy_pass http://localhost:7002;
         }
     
         if ($first_subpath ~* rclone) {
@@ -47,6 +77,24 @@ server {
         proxy_read_timeout    86400;
     }
 
+
+    # kosmos2
+    location ~* ^/kosmos2/(.*)$ {
+        
+        rewrite ^/kosmos2/(.*) /$1 break;
+        proxy_pass http://localhost:7014;
+        
+    }
+    
+
+    # musicgen
+    location ~* ^/musicgen/(.*)$ {
+        
+        rewrite ^/musicgen/(.*) /$1 break;
+        proxy_pass http://localhost:7003;
+        
+    }
+    
 
     # sd_a111
     location ~* ^/sd-a111/(.*)$ {
@@ -66,11 +114,47 @@ server {
     }
     
 
+    # sd_fooocus
+    location ~* ^/sd-fooocus/(.*)$ {
+        
+        rewrite ^/sd-fooocus/(.*) /$1 break;
+        proxy_pass http://localhost:7015;
+        
+    }
+    
+
+    # sd_forge
+    location ~* ^/sd-forge/(.*)$ {
+        
+        rewrite ^/sd-forge/(.*) /$1 break;
+        proxy_pass http://localhost:7018;
+        
+    }
+    
+
+    # sd_invoke
+    location ~* ^/sd-invoke/(.*)$ {
+        
+        rewrite ^/sd-invoke/(.*) /$1 break;
+        proxy_pass http://localhost:7006;
+        
+    }
+    
+
     # command
     location ~* ^/command/(.*)$ {
         
         rewrite ^/command/(.*) /$1 break;
         proxy_pass http://localhost:7000;
+        
+    }
+    
+
+    # image_browser
+    location ~* ^/image-browser/(.*)$ {
+        
+        absolute_redirect off;
+        return 301 /infinite_image_browsing;
         
     }
     

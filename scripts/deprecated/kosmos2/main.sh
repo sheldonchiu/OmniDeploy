@@ -27,13 +27,11 @@ if [[ "$REINSTALL_KOSMOS2" || ! -f "/tmp/kosmos2.prepared" ]]; then
     prepare_repo  
     rm -rf $VENV_DIR/kosmos2-env
     
+    echo "### Installing Python ###"
     
-    python3 -m venv /tmp/kosmos2-env
+    uv venv --seed --python 3.10 $VENV_DIR/kosmos2-env
     
     source $VENV_DIR/kosmos2-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     cd $REPO_DIR/kosmos-2
 

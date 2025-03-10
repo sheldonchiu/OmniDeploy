@@ -29,13 +29,11 @@ if [[ "$REINSTALL_SD_INVOKE" || ! -f "/tmp/sd_invoke.prepared" ]]; then
     prepare_link "${symlinks[@]}"
     rm -rf $VENV_DIR/sd_invoke-env
     
+    echo "### Installing Python ###"
     
-    python3.10 -m venv $VENV_DIR/sd_invoke-env
+    uv venv --seed --python 3.1 $VENV_DIR/sd_invoke-env
     
     source $VENV_DIR/sd_invoke-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     apt-get install -qq build-essential -y > /dev/null
     apt-get install -qq python3-opencv libopencv-dev -y > /dev/null

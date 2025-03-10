@@ -41,8 +41,12 @@ if [[ ! -f "/tmp/prepared" ]]; then
   echo "Installing common dependencies"
   apt-get update -qq
   apt-get install -y curl jq git-lfs ninja-build gettext-base \
-      aria2 zip python3.10 python3-venv python3-dev \
-      python3.10-venv python3.10-dev python3.10-tk libgl1 libglib2.0-0 > /dev/null
+      aria2 zip libgl1 libglib2.0-0 > /dev/null
+
+  # Install UV
+  echo "Installing UV"
+  curl -LsSf https://astral.sh/uv/0.6.5/install.sh | sh > /dev/null
+  source $HOME/.local/bin/env
 
   # Add alias to check the status of the web app
   chmod +x $WORKING_DIR/utils/status_check.py

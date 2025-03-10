@@ -20,13 +20,11 @@ if [[ "$REINSTALL_IMAGE_BROWSER" || ! -f "/tmp/image_browser.prepared" ]]; then
     prepare_repo
     rm -rf $VENV_DIR/image_browser-env
     
+    echo "### Installing Python ###"
     
-    python3 -m venv /tmp/image_browser-env
+    uv venv --seed --python 3.10 $VENV_DIR/image_browser-env
     
     source $VENV_DIR/image_browser-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     cd $REPO_DIR
     pip install -r requirements.txt

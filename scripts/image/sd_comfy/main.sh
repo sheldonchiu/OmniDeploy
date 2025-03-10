@@ -21,22 +21,11 @@ if [[ "$REINSTALL_SD_COMFY" || ! -f "/tmp/sd_comfy.prepared" ]]; then
     prepare_repo 
     rm -rf $VENV_DIR/sd_comfy-env
     
+    echo "### Installing Python ###"
     
-    echo "### Installing Python 3.12 ###"
-    apt-get install -y software-properties-common > /dev/null
-    add-apt-repository -y ppa:deadsnakes/ppa
-    apt-get update -qq
-    apt-get install -y python3.12 \
-     python3.12-venv \
-     python3.12-dev \
-     python3.12-tk > /dev/null
-
-    python3.12 -m venv $VENV_DIR/sd_comfy-env
+    uv venv --seed --python 3.12 $VENV_DIR/sd_comfy-env
     
     source $VENV_DIR/sd_comfy-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.yaml $MODEL_DIR $REPO_DIR/models
 

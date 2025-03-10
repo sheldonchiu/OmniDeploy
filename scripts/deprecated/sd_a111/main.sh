@@ -41,22 +41,11 @@ if [[ "$REINSTALL_SD_A111" || ! -f "/tmp/sd_a111.prepared" ]]; then
     # cp $LINK_CONTROLNET_TO/*.yaml $MODEL_DIR/controlnet/
     rm -rf $VENV_DIR/sd_a111-env
     
+    echo "### Installing Python ###"
     
-    echo "### Installing Python 3.1 ###"
-    apt-get install -y software-properties-common > /dev/null
-    add-apt-repository -y ppa:deadsnakes/ppa
-    apt-get update -qq
-    apt-get install -y python3.1 \
-     python3.1-venv \
-     python3.1-dev \
-     python3.1-tk > /dev/null
-
-    python3.1 -m venv $VENV_DIR/sd_a111-env
+    uv venv --seed --python 3.1 $VENV_DIR/sd_a111-env
     
     source $VENV_DIR/sd_a111-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     # fix install issue with pycairo, which is needed by sd-webui-controlnet
     apt-get install -y libcairo2-dev libjpeg-dev libgif-dev

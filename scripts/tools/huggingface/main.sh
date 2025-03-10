@@ -16,13 +16,11 @@ if [[ "$REINSTALL_HUGGINGFACE" || ! -f "/tmp/huggingface.prepared" ]]; then
     
     rm -rf $VENV_DIR/huggingface-env
     
+    echo "### Installing Python ###"
     
-    python3 -m venv /tmp/huggingface-env
+    uv venv --seed --python 3.10 $VENV_DIR/huggingface-env
     
     source $VENV_DIR/huggingface-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     pip install --upgrade huggingface_hub
     

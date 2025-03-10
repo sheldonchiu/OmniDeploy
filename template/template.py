@@ -27,6 +27,7 @@ if __name__ == "__main__":
     
     relative_path = Path(args.yaml_file).parent.resolve().relative_to(workspace_path/"configs")
     output_path = script_output_path / relative_path / yaml_data["name"]
+    os.makedirs(output_path, exist_ok=True)
         
     # Load the YAML file as a Jinja2 template
     with open(args.yaml_file) as f:

@@ -21,13 +21,11 @@ if [[ "$REINSTALL_MUSICGEN" || ! -f "/tmp/musicgen.prepared" ]]; then
     prepare_repo
     rm -rf $VENV_DIR/musicgen-env
     
+    echo "### Installing Python ###"
     
-    python3.10 -m venv $VENV_DIR/musicgen-env
+    uv venv --seed --python 3.1 $VENV_DIR/musicgen-env
     
     source $VENV_DIR/musicgen-env/bin/activate
-
-    pip install pip==24.0
-    pip install --upgrade wheel setuptools
     
     cd $REPO_DIR
     pip install 'torch>=2.0'
