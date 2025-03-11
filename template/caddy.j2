@@ -72,6 +72,7 @@
     
 
 {% for item in data %}
+    redir /{{ item['name']|replace('_', '-') }} /{{ item['name']|replace('_', '-') }}/ 301
     handle_path /{{ item['name']|replace('_', '-') }}/* {
         {% if item['caddy_override'] %}
         {{ item['caddy_override']|indent(8) }}

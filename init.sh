@@ -16,3 +16,5 @@ git clone https://github.com/sheldonchiu/OmniDeploy.git
 cd "$WORKING_DIR/OmniDeploy"
 git checkout dev
 bash entry.sh
+
+source ~/.bashrc

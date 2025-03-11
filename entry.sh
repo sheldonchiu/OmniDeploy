@@ -47,8 +47,15 @@ if [[ ! -f "/tmp/prepared" ]]; then
 
   # install gum
   mkdir -p /etc/apt/keyrings
-  curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
-  echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
+  # Download and add the GPG key, skipping if it already exists
+  if [ ! -f /etc/apt/keyrings/charm.gpg ]; then
+    curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+  fi
+
+  # Add the repository to sources list if not already added
+  if [ ! -f /etc/apt/sources.list.d/charm.list ]; then
+    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
+  fi
   apt-get -qq update && apt-get install gum > /dev/null
 
   # Add alias to check the status of the web app
@@ -61,8 +68,14 @@ if [[ ! -f "/tmp/prepared" ]]; then
   # Use Caddy to expose web app
   echo "Installing Caddy Proxy"
   apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl > /dev/null
-  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' |  gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+  
+  if [ ! -f /usr/share/keyrings/caddy-stable-archive-keyring.gpg ]; then
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' |  gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+  fi
+
+  if [ ! -f /etc/apt/sources.list.d/caddy-stable.list ]; then
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+  fi
   apt-get -qq update
   apt-get install -y caddy > /dev/null
 
@@ -72,7 +85,7 @@ if [[ ! -f "/tmp/prepared" ]]; then
   if pgrep caddy > /dev/null; then
       /usr/bin/caddy reload --config /etc/caddy/Caddyfile
   else
-      /usr/bin/caddy start --pidfile /tmp/caddy.pid
+      /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid
   fi
 
 fi 

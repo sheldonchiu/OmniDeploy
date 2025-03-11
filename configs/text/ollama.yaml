@@ -27,7 +27,7 @@ setup_env: |-
   export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/llm-models"}
   export OLLAMA_MODELS=$MODEL_DIR
 
-  export {{ name|upper }}_PORT= {{ port }}
+  export {{ name|upper }}_PORT={{ port }}
   export OLLAMA_HOST=0.0.0.0:{{ port }}
 
   export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
