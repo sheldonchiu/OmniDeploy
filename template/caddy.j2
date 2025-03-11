@@ -73,12 +73,12 @@
 
 {% for item in data %}
     {% if item['caddy_extra'] %}
-    {{ item['caddy_extra'] }}
+    {{ item['caddy_extra'] | indent(8) }}
     {% endif %}
     redir /{{ item['name']|replace('_', '-') }} /{{ item['name']|replace('_', '-') }}/ 301
     handle_path /{{ item['name']|replace('_', '-') }}/* {
         {% if item['caddy_override'] %}
-        {{ item['caddy_override']|indent(8) }}
+        {{ item['caddy_override'] | indent(8) }}
         {% else %}
         import cors-api
         reverse_proxy localhost:{{ item['port'] }}

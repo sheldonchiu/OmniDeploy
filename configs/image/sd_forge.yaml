@@ -46,7 +46,9 @@ start: |-
   if [[ -n "${SD_FORGE_GRADIO_AUTH}" ]]; then
     auth="--gradio-auth ${SD_FORGE_GRADIO_AUTH}"
   fi
-  PYTHONUNBUFFERED=1 service_loop "python webui.py --xformers --port ${{ name|upper }}_PORT --subpath sd-forge $auth --controlnet-dir $MODEL_DIR/controlnet/ --enable-insecure-extension-access ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
+  if [[ ! -n "$CF_TOKEN" ]]; then
+    subpath="--subpath {{ name }}"
+  PYTHONUNBUFFERED=1 service_loop "python webui.py --xformers --port ${{ name|upper }}_PORT $subpath $auth --controlnet-dir $MODEL_DIR/controlnet/ --enable-insecure-extension-access ${EXTRA_{{ name|upper }}_ARGS}" > $LOG_DIR/{{ name }}.log 2>&1 &
   echo $! > /tmp/{{ name }}.pid
 
 setup_env: |-

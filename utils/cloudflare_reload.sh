@@ -21,7 +21,7 @@ function check_required_env_vars() {
   return 0
 }
 
-export SCRIPT_ROOT_DIR=$(dirname "$(realpath "$0")")
+export SCRIPT_ROOT_DIR=$(dirname "$(realpath "$0")")/..
 cd $SCRIPT_ROOT_DIR
 
 # Clear env
@@ -54,4 +54,4 @@ do
 done
 
 cd $SCRIPT_ROOT_DIR
-bash cloudflared/control.sh reload
+bash scripts/tools/cloudflared/control.sh reload

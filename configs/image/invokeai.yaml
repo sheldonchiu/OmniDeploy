@@ -48,7 +48,6 @@ setup_env: |-
   export {{ name|upper }}_PORT=${{ '{' ~ name|upper }}_PORT:-"7006"}
   export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
   export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
-  export HUGGINGFACE_TOKEN=$HF_TOKEN
 
 extra_files:
   config.yaml: |-

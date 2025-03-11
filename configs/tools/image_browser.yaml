@@ -44,7 +44,10 @@ setup_env: |-
   export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
   export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
 
-caddy_override: |-
-  rewrite * /infinite_image_browsing{path}
-  reverse_proxy localhost:{{ port }}
+caddy_extra: |-
+  handle /infinite_image_browsing/* {
+    import cors-api
+    reverse_proxy localhost:{{ port }}
+  }
+
 

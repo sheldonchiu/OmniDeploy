@@ -149,7 +149,7 @@
     handle_path /ollama/* {
         
         import cors-api
-        reverse_proxy localhost:7020
+        reverse_proxy localhost:11434
         
     }
 
@@ -172,10 +172,15 @@
     }
 
     
+    handle /infinite_image_browsing/* {
+          import cors-api
+          reverse_proxy localhost:7002
+        }
+    
     redir /image-browser /image-browser/ 301
     handle_path /image-browser/* {
         
-        rewrite * /infinite_image_browsing{path}
+        import cors-api
         reverse_proxy localhost:7002
         
     }

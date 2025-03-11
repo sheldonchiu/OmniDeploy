@@ -48,6 +48,7 @@ show_main_menu() {
   options=(
     "Run Scripts"
     "Manage Processes"
+    "Use Cloudflare Tunnel"
     "Update Project"
     "View Documentation"
     "Exit"
@@ -57,28 +58,86 @@ show_main_menu() {
   selection=$(gum choose "${options[@]}") || selection="Exit"
   
   case "$selection" in
-    "Run Scripts")
-      run_scripts
-      ;;
-    "Manage Processes")
-      manage_pid_processes
-      ;;
-    "Update Project")
-      update_project
-      ;;
-    "View Documentation")
-      show_documentation
-      ;;
-    "Exit")
-      echo -e "${GREEN}Exiting...${NC}"
-      exit 0
-      ;;
-    *)
-      echo -e "${RED}Invalid option. Please try again.${NC}"
-      sleep 1
-      ;;
+  "Run Scripts")
+    run_scripts
+    ;;
+  "Manage Processes")
+    manage_pid_processes
+    ;;
+  "Use Cloudflare Tunnel")
+    use_cloudflare_tunnel
+    ;;
+  "Update Project")
+    update_project
+    ;;
+  "View Documentation")
+    show_documentation
+    ;;
+  "Exit")
+    echo -e "${GREEN}Exiting...${NC}"
+    exit 0
+    ;;
+  *)
+    echo -e "${RED}Invalid option. Please try again.${NC}"
+    sleep 1
+    ;;
   esac
+
 }
+
+# Function to use Cloudflare tunnel
+use_cloudflare_tunnel() {
+  echo -e "${BLUE}=== Use Cloudflare Tunnel ===${NC}"
+  
+  # Ask for CF_TOKEN or default to "quick"
+  echo -e "${YELLOW}Enter your Cloudflare Token or press Enter to use 'quick' mode:${NC}"
+  token=$(gum input --placeholder "quick") || {
+    echo -e "${YELLOW}Cancelled. Returning to main menu.${NC}"
+    return  # User pressed ESC
+  }
+  
+  # Set default value if empty
+  if [ -z "$token" ]; then
+    token="quick"
+    echo -e "${YELLOW}Using default 'quick' mode${NC}"
+  fi
+  
+  # Export the token as environment variable
+  export CF_TOKEN="$token"
+  echo -e "${GREEN}CF_TOKEN set to: $CF_TOKEN${NC}"
+  
+  # Add or update CF_TOKEN in .env file
+  ENV_FILE=".env"
+  
+  # Check if CF_TOKEN already exists in the file
+  if grep -q "^CF_TOKEN=" "$ENV_FILE"; then
+    # Update existing CF_TOKEN
+    sed -i "s/^CF_TOKEN=.*$/CF_TOKEN=\"$token\"/" "$ENV_FILE"
+    echo -e "${GREEN}Updated CF_TOKEN in .env file${NC}"
+  else
+    # Append CF_TOKEN to existing file
+    echo "CF_TOKEN=\"$token\"" >> "$ENV_FILE"
+    echo -e "${GREEN}Appended CF_TOKEN to .env file${NC}"
+  fi
+  
+  # Check if the cloudflared reload script exists
+  if [ -f "utils/cloudflare_reload.sh" ]; then
+    echo -e "${YELLOW}Executing Cloudflare Tunnel script...${NC}"
+    bash utils/cloudflare_reload.sh
+    
+    # Remind user to reload service
+    echo -e "${YELLOW}REMINDER: If you are switching from caddy proxy to cloudflare, please reload running services to avoid possible issue.${NC}"
+  else
+    echo -e "${RED}Error: cloudflare_reload.sh script not found!${NC}"
+  fi
+  
+  # Wait for user to press Enter or ESC
+  if wait_for_input; then
+    return  # ESC was pressed, return immediately
+  fi
+}
+
+
 
 # Function to update the project using git
 update_project() {
