@@ -67,7 +67,7 @@ setup_env: |-
   export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/llm-models"}
   export REPO_DIR=${{ '{' ~ name|upper }}_REPO_DIR:-"$ROOT_REPO_DIR/text-generation-webui"}
 
-  export {{ name|upper }}_PORT= {{ port }}
+  export {{ name|upper }}_PORT={{ port }}
   export {{ name|upper }}_OPENAI_API_PORT=${{ '{' ~ name|upper }}_OPENAI_API_PORT:-7013}
   export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT:${{ name|upper }}_OPENAI_API_PORT"
   export PORT_MAPPING="$PORT_MAPPING:{{ name }}:{{ name }}_openai_api"
