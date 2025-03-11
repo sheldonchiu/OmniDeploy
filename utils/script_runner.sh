@@ -41,35 +41,106 @@ wait_for_input() {
 
 # Function to display the main menu and get selection
 show_main_menu() {
-  echo -e "${BLUE}=== YAML Script Runner ===${NC}"
+  echo -e "${BLUE}=== Script Runner ===${NC}"
+  echo -e "  - Use the arrow keys to navigate or type to search for specific scripts"
+  echo -e ""
   
-  # Use gum choose to create a top-level menu
-  selected_option=$(gum choose "Run Scripts" "Run Status Monitor" "Manage Processes" "Configure Settings" "Help" "Exit")
+  options=(
+    "Run Scripts"
+    "Manage Processes"
+    "Update Project"
+    "View Documentation"
+    "Exit"
+  )
   
-  case "$selected_option" in
+  echo -e "${YELLOW}Select an option:${NC}"
+  selection=$(gum choose "${options[@]}") || selection="Exit"
+  
+  case "$selection" in
     "Run Scripts")
-      run_scripts
-      ;;
-    "Run Status Monitor")
-      run_status_monitor
+      run_yaml_scripts
       ;;
     "Manage Processes")
       manage_pid_processes
       ;;
-    "Configure Settings")
-      configure_settings
+    "Update Project")
+      update_project
       ;;
-    "Help")
-      show_help
+    "View Documentation")
+      show_documentation
       ;;
     "Exit")
-      echo -e "${YELLOW}Exiting program. Goodbye!${NC}"
+      echo -e "${GREEN}Exiting...${NC}"
       exit 0
       ;;
     *)
-      echo -e "${RED}Invalid option${NC}"
+      echo -e "${RED}Invalid option. Please try again.${NC}"
+      sleep 1
       ;;
   esac
+}
+
+# Function to update the project using git
+update_project() {
+  echo -e "${BLUE}=== Update Project ===${NC}"
+  
+  # Check if the current directory is a git repository
+  if [ ! -d ".git" ]; then
+    echo -e "${RED}Error: The current directory does not appear to be a git repository.${NC}"
+    
+    # Wait for user to press Enter or ESC
+    if wait_for_input; then
+      return  # ESC was pressed, return immediately
+    fi
+    return 0
+  fi
+  
+  echo -e "${YELLOW}Checking remote repository for updates...${NC}"
+  
+  # Fetch the latest changes without merging
+  git fetch
+  
+  # Check if there are changes to pull
+  local_rev=$(git rev-parse HEAD)
+  remote_rev=$(git rev-parse @{u})
+  
+  if [ "$local_rev" = "$remote_rev" ]; then
+    echo -e "${GREEN}Your project is already up to date.${NC}"
+    
+    # Wait for user to press Enter or ESC
+    if wait_for_input; then
+      return  # ESC was pressed, return immediately
+    fi
+    return 0
+  fi
+  
+  echo -e "${YELLOW}Updates available. Attempting to pull changes...${NC}"
+  
+  # Try to pull changes
+  if git pull; then
+    echo -e "${GREEN}Project updated successfully!${NC}"
+  else
+    echo -e "${RED}Git pull failed. There might be conflicts with your local changes.${NC}"
+    
+    # Ask if user wants to force pull
+    echo -e "${YELLOW}Do you want to force pull using git reset? This will discard all local changes!${NC}"
+    if gum confirm "Force pull (WARNING: This will discard all local changes)"; then
+      echo -e "${YELLOW}Performing force pull...${NC}"
+      
+      # Force pull using git reset
+      git fetch origin
+      git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
+      
+      echo -e "${GREEN}Project force-updated successfully!${NC}"
+    else
+      echo -e "${YELLOW}Update cancelled. Your local changes remain intact.${NC}"
+    fi
+  fi
+  
+  # Wait for user to press Enter or ESC
+  if wait_for_input; then
+    return  # ESC was pressed, return immediately
+  fi
 }
 
 # Function to manage PID processes

@@ -39,7 +39,7 @@ log "Finished Preparing Environment for Open WebUI"
 if [[ -z "$INSTALL_ONLY" ]]; then
   echo "### Starting Open WebUI ###"
   log "Starting Open WebUI"
-  PYTHONUNBUFFERED=1 service_loop "/usr/local/bin/open-webui serve --port 7021" > $LOG_DIR/openwebui.log 2>&1 &
+  PYTHONUNBUFFERED=1 service_loop "uvx --python $VENV_DIR/openwebui-env/bin/python open-webui serve --port 7021" > $LOG_DIR/openwebui.log 2>&1 &
   echo $! > /tmp/openwebui.pid
 fi
 

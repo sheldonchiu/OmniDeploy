@@ -12,7 +12,7 @@ prepare_env: |-
 action_before_start: |-
 
 start: |-
-  PYTHONUNBUFFERED=1 service_loop "/usr/local/bin/open-webui serve --port {{ port }}" > $LOG_DIR/{{ name }}.log 2>&1 &
+  PYTHONUNBUFFERED=1 service_loop "uvx --python $VENV_DIR/{{ name }}-env/bin/python open-webui serve --port {{ port }}" > $LOG_DIR/{{ name }}.log 2>&1 &
   echo $! > /tmp/{{ name }}.pid
 
 custom_start: ""
@@ -22,16 +22,10 @@ custom_stop: ""
 export_required_env: ""
 setup_env: |-
   export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/llm-models"}
-  export OLLAMA_MODELS=$MODEL_DIR
 
   export {{ name|upper }}_PORT={{ port }}
 
   export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
   export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
 
-
-# nginx_extra: |-
-#   location ~* ^/textgen-openai/(.*)$ {
-#       rewrite ^/textgen-openai/(.*)$ /$1 break;
-#       proxy_pass http://localhost:7013;
-#   }
+  export DATA_DIR=$ROOT_REPO_DIR/settings/{{ name }}
