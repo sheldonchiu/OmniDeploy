@@ -1,0 +1,41 @@
+title: Ollama
+name: ollama
+use_python: false
+expose: true
+port: 7020
+
+
+prepare_env: |-
+  if [[ -d /usr/lib/ollama ]]; then
+    rm -rf /usr/lib/ollama
+  fi
+
+  curl -L https://ollama.com/download/ollama-linux-amd64.tgz | tar -C /usr -xzf -
+
+action_before_start: |-
+
+start: |-
+  PYTHONUNBUFFERED=1 service_loop "/usr/bin/ollama serve" > $LOG_DIR/{{ name }}.log 2>&1 &
+  echo $! > /tmp/{{ name }}.pid
+
+custom_start: ""
+custom_reload: ""
+custom_stop: ""
+
+export_required_env: ""
+setup_env: |-
+  export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/llm-models"}
+  export OLLAMA_MODELS=$MODEL_DIR
+
+  export {{ name|upper }}_PORT= {{ port }}
+  export OLLAMA_HOST=0.0.0.0:{{ port }}
+
+  export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
+  export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
+
+
+# nginx_extra: |-
+#   location ~* ^/textgen-openai/(.*)$ {
+#       rewrite ^/textgen-openai/(.*)$ /$1 break;
+#       proxy_pass http://localhost:7013;
+#   }

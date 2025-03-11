@@ -66,7 +66,7 @@ if [[ ! -f "/tmp/prepared" ]]; then
   apt-get -qq update
   apt-get install -y caddy > /dev/null
 
-  envsubst '$CADDY_PORT $LOG_DIR' < $WORKING_DIR/scripts/Caddyfile > /etc/caddy/Caddyfile
+  envsubst '$CADDY_IP $CADDY_PORT $LOG_DIR' < $WORKING_DIR/scripts/Caddyfile > /etc/caddy/Caddyfile
 
   # Check if caddy is already running and reload, otherwise start it
   if pgrep caddy > /dev/null; then

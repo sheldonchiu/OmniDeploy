@@ -1,0 +1,61 @@
+#!/bin/bash
+set -e
+
+current_dir=$(dirname "$(realpath "$0")")
+cd $current_dir
+source .env
+
+# Set up a trap to call the error_exit function on ERR signal
+trap 'error_exit "### ERROR ###"' ERR
+
+
+echo "### Setting up Open WebUI ###"
+log "Setting up Open WebUI"
+if [[ "$REINSTALL_OPENWEBUI" || ! -f "/tmp/openwebui.prepared" ]]; then
+
+    
+    rm -rf $VENV_DIR/openwebui-env
+    
+    echo "### Installing Python ###"
+    
+    $UV_INSTALL_DIR/uv venv --seed --python 3.11 $VENV_DIR/openwebui-env
+    
+    source $VENV_DIR/openwebui-env/bin/activate
+    
+    $UV_INSTALL_DIR/uv pip install -U open-webui
+    
+    touch /tmp/openwebui.prepared
+else
+    
+    source $VENV_DIR/openwebui-env/bin/activate
+    
+fi
+log "Finished Preparing Environment for Open WebUI"
+
+
+
+
+
+if [[ -z "$INSTALL_ONLY" ]]; then
+  echo "### Starting Open WebUI ###"
+  log "Starting Open WebUI"
+  PYTHONUNBUFFERED=1 service_loop "/usr/local/bin/open-webui serve --port 7021" > $LOG_DIR/openwebui.log 2>&1 &
+  echo $! > /tmp/openwebui.pid
+fi
+
+
+send_to_discord "Open WebUI Started"
+
+if env | grep -q "PAPERSPACE"; then
+  send_to_discord "Link: https://$PAPERSPACE_FQDN/openwebui/"
+fi
+
+
+if [[ -n "${CF_TOKEN}" ]]; then
+  if [[ "$RUN_SCRIPT" != *"openwebui"* ]]; then
+    export RUN_SCRIPT="$RUN_SCRIPT,openwebui"
+  fi
+  bash $WORKING_DIR/utils/cloudflare_reload.sh
+fi
+
+echo "### Done ###"

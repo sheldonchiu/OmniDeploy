@@ -8,6 +8,39 @@
 # this machine's public IP, then replace ":80" below with your
 # domain name.
 
+# CORS Preflight (OPTIONS) + Request (GET, POST, PATCH, PUT, DELETE)
+(cors-api) {
+	@match-cors-api-preflight method OPTIONS
+	handle @match-cors-api-preflight {
+		header {
+			Access-Control-Allow-Origin "{http.request.header.origin}"
+			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+			Access-Control-Allow-Headers "Origin, Accept, Authorization, Content-Type, X-Requested-With"
+			Access-Control-Allow-Credentials "true"
+			Access-Control-Max-Age "3600"
+			defer
+		}
+		respond "" 204
+	}
+
+	@match-cors-api-request {
+		not {
+			header Origin "{http.request.scheme}://{http.request.host}"
+		}
+		header Origin "{http.request.header.origin}"
+	}
+	handle @match-cors-api-request {
+		header {
+			Access-Control-Allow-Origin "{http.request.header.origin}"
+			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+			Access-Control-Allow-Headers "Origin, Accept, Authorization, Content-Type, X-Requested-With"
+			Access-Control-Allow-Credentials "true"
+			Access-Control-Max-Age "3600"
+			defer
+		}
+	}
+}
+
 :${CADDY_PORT} {
     log {
         output file ${LOG_DIR}/caddy.log {
@@ -16,6 +49,13 @@
             roll_keep_for 2160h  # Keep for 90 days (default)
         }
     }
+
+    handle_errors {
+        respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+    }
+
+    file_server
+    
     # Handle Jupyter WebSocket connections with regex matching
     @jupyter_ws {
         path_regexp jupyter ^/api/kernels/[^/]+/(channels|iopub|shell|stdin)/?$|^/terminals/websocket/?$
@@ -29,12 +69,14 @@
             }
         }
     }
+    
 
 {% for item in data %}
     handle_path /{{ item['name']|replace('_', '-') }}/* {
         {% if item['caddy_override'] %}
         {{ item['caddy_override']|indent(8) }}
         {% else %}
+        import cors-api
         reverse_proxy localhost:{{ item['port'] }}
         {% endif %}
     }

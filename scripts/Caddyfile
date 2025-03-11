@@ -8,6 +8,39 @@
 # this machine's public IP, then replace ":80" below with your
 # domain name.
 
+# CORS Preflight (OPTIONS) + Request (GET, POST, PATCH, PUT, DELETE)
+(cors-api) {
+	@match-cors-api-preflight method OPTIONS
+	handle @match-cors-api-preflight {
+		header {
+			Access-Control-Allow-Origin "{http.request.header.origin}"
+			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+			Access-Control-Allow-Headers "Origin, Accept, Authorization, Content-Type, X-Requested-With"
+			Access-Control-Allow-Credentials "true"
+			Access-Control-Max-Age "3600"
+			defer
+		}
+		respond "" 204
+	}
+
+	@match-cors-api-request {
+		not {
+			header Origin "{http.request.scheme}://{http.request.host}"
+		}
+		header Origin "{http.request.header.origin}"
+	}
+	handle @match-cors-api-request {
+		header {
+			Access-Control-Allow-Origin "{http.request.header.origin}"
+			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+			Access-Control-Allow-Headers "Origin, Accept, Authorization, Content-Type, X-Requested-With"
+			Access-Control-Allow-Credentials "true"
+			Access-Control-Max-Age "3600"
+			defer
+		}
+	}
+}
+
 :${CADDY_PORT} {
     log {
         output file ${LOG_DIR}/caddy.log {
@@ -16,6 +49,13 @@
             roll_keep_for 2160h  # Keep for 90 days (default)
         }
     }
+
+    handle_errors {
+        respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+    }
+
+    file_server
+    
     # Handle Jupyter WebSocket connections with regex matching
     @jupyter_ws {
         path_regexp jupyter ^/api/kernels/[^/]+/(channels|iopub|shell|stdin)/?$|^/terminals/websocket/?$
@@ -29,10 +69,12 @@
             }
         }
     }
+    
 
 
     handle_path /kosmos2/* {
         
+        import cors-api
         reverse_proxy localhost:7014
         
     }
@@ -41,6 +83,7 @@
 
     handle_path /musicgen/* {
         
+        import cors-api
         reverse_proxy localhost:7003
         
     }
@@ -49,6 +92,7 @@
 
     handle_path /sd-a111/* {
         
+        import cors-api
         reverse_proxy localhost:7008
         
     }
@@ -57,6 +101,7 @@
 
     handle_path /swarmui/* {
         
+        import cors-api
         reverse_proxy localhost:7016
         
     }
@@ -65,6 +110,7 @@
 
     handle_path /comfyui/* {
         
+        import cors-api
         reverse_proxy localhost:7005
         
     }
@@ -73,6 +119,7 @@
 
     handle_path /invokeai/* {
         
+        import cors-api
         reverse_proxy localhost:7006
         
     }
@@ -81,6 +128,7 @@
 
     handle_path /sd-fooocus/* {
         
+        import cors-api
         reverse_proxy localhost:7015
         
     }
@@ -89,7 +137,35 @@
 
     handle_path /sd-forge/* {
         
+        import cors-api
         reverse_proxy localhost:7018
+        
+    }
+
+    
+
+    handle_path /ollama/* {
+        
+        import cors-api
+        reverse_proxy localhost:7020
+        
+    }
+
+    
+
+    handle_path /openwebui/* {
+        
+        import cors-api
+        reverse_proxy localhost:7021
+        
+    }
+
+    
+
+    handle_path /oobabooga/* {
+        
+        import cors-api
+        reverse_proxy localhost:7009
         
     }
 
@@ -97,6 +173,7 @@
 
     handle_path /command/* {
         
+        import cors-api
         reverse_proxy localhost:7000
         
     }
@@ -114,6 +191,7 @@
 
     handle_path /rclone/* {
         
+        import cors-api
         reverse_proxy localhost:7004
         
     }

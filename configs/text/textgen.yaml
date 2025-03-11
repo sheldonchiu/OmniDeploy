@@ -1,7 +1,7 @@
-title: Text generation Webui
-name: textgen
+title: Oobabooga Text generation Webui
+name: oobabooga
 use_python: true
-python_version: 3.10
+python_version: "3.11"
 expose: true
 port: 7009
 
@@ -18,25 +18,8 @@ prepare_repo: |-
 
 prepare_env: |-
   cd $REPO_DIR
-  pip install torch torchvision torchaudio
-  pip install -r requirements.txt
-
-  mkdir -p repositories
-  cd repositories
-  TARGET_REPO_DIR=$REPO_DIR/repositories/GPTQ-for-LLaMa \
-  TARGET_REPO_BRANCH="cuda" \
-  TARGET_REPO_URL="https://github.com/qwopqwop200/GPTQ-for-LLaMa.git" \
-  prepare_repo
-  
-  cd GPTQ-for-LLaMa
-  python setup_cuda.py install
-
-  pip uninstall -y llama-cpp-python
-  CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python --no-cache-dir
-
-  pip install deepspeed
-
-  pip install xformers
+  uv pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+  uv pip install -r requirements.txt
 
 download_model: |-
   # Prepare model dir and link it under the models folder inside the repo
@@ -51,17 +34,13 @@ download_model: |-
       cd $current_dir_save
   fi
 
-
   llm_model_download
 
 action_before_start: |-
-  if env | grep -q "PAPERSPACE"; then
-    sed -i "s/server_port=shared.args.listen_port, inbrowser=shared.args.auto_launch, auth=auth)/server_port=shared.args.listen_port, inbrowser=shared.args.auto_launch, auth=auth, root_path='\\/textgen')/g" $REPO_DIR/server.py
-  fi
 
 start: |-
   cd $REPO_DIR
-  share_args="--chat --listen-port ${{ name|upper }}_PORT --xformers ${EXTRA_{{ name|upper }}_ARGS}"
+  share_args="--subpath /{{ name }} --listen-port ${{ name|upper }}_PORT ${EXTRA_{{ name|upper }}_ARGS}"
   if [ -v {{ name|upper }}_ENABLE_OPENAI_API ] && [ ! -z "${{ name|upper }}_ENABLE_OPENAI_API" ];then
     loader_arg=""
     if echo "${{ name|upper }}_OPENAI_MODEL" | grep -q "GPTQ"; then
@@ -70,16 +49,11 @@ start: |-
     if echo "${{ name|upper }}_OPENAI_MODEL" | grep -q "LongChat"; then
       loader_arg+=" --max_seq_len 8192 --compress_pos_emb 4"
     fi
-    PYTHONUNBUFFERED=1 OPENEDAI_PORT=7013 service_loop "python server.py --model ${{ name|upper }}_OPENAI_MODEL $loader_arg --extensions openai $share_args" > $LOG_DIR/{{ name }}.log 2>&1 &
+    PYTHONUNBUFFERED=1 service_loop "python server.py --model ${{ name|upper }}_OPENAI_MODEL $loader_arg --api --api-port ${{ name|upper }}_OPENAI_API_PORT $share_args" > $LOG_DIR/{{ name }}.log 2>&1 &
   else
     PYTHONUNBUFFERED=1 service_loop "python server.py  $share_args" > $LOG_DIR/{{ name }}.log 2>&1 &
   fi
   echo $! > /tmp/{{ name }}.pid
-  
-  # undo the change for git pull to work
-  if env | grep -q "PAPERSPACE"; then
-    sed -i "s/server_port=shared.args.listen_port, inbrowser=shared.args.auto_launch, auth=auth, root_path='\\/textgen')/server_port=shared.args.listen_port, inbrowser=shared.args.auto_launch, auth=auth)/g" $REPO_DIR/server.py
-  fi
 
 custom_start: ""
 custom_reload: ""
