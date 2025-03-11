@@ -46,16 +46,5 @@ fi
 
 send_to_discord "Open WebUI Started"
 
-if env | grep -q "PAPERSPACE"; then
-  send_to_discord "Link: https://$PAPERSPACE_FQDN/openwebui/"
-fi
-
-
-if [[ -n "${CF_TOKEN}" ]]; then
-  if [[ "$RUN_SCRIPT" != *"openwebui"* ]]; then
-    export RUN_SCRIPT="$RUN_SCRIPT,openwebui"
-  fi
-  bash $WORKING_DIR/utils/cloudflare_reload.sh
-fi
 
 echo "### Done ###"

@@ -72,6 +72,9 @@
     
 
 {% for item in data %}
+    {% if item['caddy_extra'] %}
+    {{ item['caddy_extra'] }}
+    {% endif %}
     redir /{{ item['name']|replace('_', '-') }} /{{ item['name']|replace('_', '-') }}/ 301
     handle_path /{{ item['name']|replace('_', '-') }}/* {
         {% if item['caddy_override'] %}
@@ -81,10 +84,6 @@
         reverse_proxy localhost:{{ item['port'] }}
         {% endif %}
     }
-
-    {% if item['caddy_extra'] %}
-    {{ item['caddy_extra'] }}
-    {% endif %}
 {% endfor %}
 
 }

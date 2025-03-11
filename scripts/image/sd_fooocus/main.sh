@@ -14,7 +14,7 @@ log "Setting up Stable Diffusion Fooocus"
 if [[ "$REINSTALL_SD_FOOOCUS" || ! -f "/tmp/sd_fooocus.prepared" ]]; then
 
     
-    if [ -f $REPO_DIR/webui.py ]; then
+    if [ -f $REPO_DIR/webui.py && ! -n "${CF_TOKEN}" ]; then
       sed -i "s|share=args_manager.args.share,root_path='/sd-fooocus'|share=args_manager.args.share|g" $REPO_DIR/webui.py
     fi
 

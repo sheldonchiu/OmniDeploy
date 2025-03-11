@@ -37,12 +37,19 @@ IFS=',' read -ra scripts <<< "$run_script"
 # Loop through each script and execute the corresponding case
 for script in "${scripts[@]}"
 do
-  cd $SCRIPT_ROOT_DIR
-  if [[ ! -d "$script" ]]; then
-    echo "Script folder $script not found, skipping..."
-    continue
+  cd "$SCRIPT_ROOT_DIR" || exit 1
+  
+  # Search for the script directory recursively
+  script_dir=$(find . -type d -name "$script")
+  
+  if [[ -z "$script_dir" ]]; then
+      echo "Script folder $script not found, skipping..."
+      continue
   fi
-  cd $script
+  
+  # Change to the found directory
+  cd "$script_dir" || continue
+  
   source_env_file
 done
 

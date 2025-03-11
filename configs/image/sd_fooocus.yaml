@@ -7,7 +7,7 @@ port: 7015
 
 prepare_repo: |-
 
-  if [ -f $REPO_DIR/webui.py ]; then
+  if [ -f $REPO_DIR/webui.py && ! -n "${CF_TOKEN}" ]; then
     sed -i "s|share=args_manager.args.share,root_path='/sd-fooocus'|share=args_manager.args.share|g" $REPO_DIR/webui.py
   fi
 

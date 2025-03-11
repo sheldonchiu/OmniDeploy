@@ -61,7 +61,9 @@ custom_stop: ""
 
 export_required_env: ""
 setup_env: |-
-  export GRADIO_ROOT_PATH=/textgen
+  if [[ ! -n "${CF_TOKEN}" ]]; then
+    export GRADIO_ROOT_PATH=/textgen
+  fi
   export MODEL_DIR=${{ '{' ~ name|upper }}_MODEL_DIR:-"$DATA_DIR/llm-models"}
   export REPO_DIR=${{ '{' ~ name|upper }}_REPO_DIR:-"$ROOT_REPO_DIR/text-generation-webui"}
 

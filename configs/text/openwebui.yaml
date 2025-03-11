@@ -2,7 +2,8 @@ title: Open WebUI
 name: openwebui
 use_python: true
 python_version: "3.11"
-expose: true
+# Open WebUI does not support subpath, need to use with tunnel
+expose: false
 port: 7021
 
 

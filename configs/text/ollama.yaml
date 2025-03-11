@@ -2,7 +2,7 @@ title: Ollama
 name: ollama
 use_python: false
 expose: true
-port: 7020
+port: 11434
 
 
 prepare_env: |-
