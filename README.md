@@ -13,7 +13,7 @@ This repository contains scripts to automatically configure your Paperspace note
 4. Sync to Minio Storage
 5. More to come...
 
-WEB UI for this repo: https://github.com/sheldonchiu/paperspace-web
+WEB UI for this repo: https://github.com/sheldonxxxx/paperspace-web
 ## Getting Started
 * Paperspace Console -> Create Notebook -> Advanced options -> Workspace -> Workspace URL: **This repository URL**
 <div align="center"> 
@@ -24,7 +24,7 @@ OR
 
 * Start your own notebook and clone this repository
 ```bash
-git clone https://github.com/sheldonchiu/Ultimate-Paperspace-Template.git
+git clone https://github.com/sheldonxxxx/Ultimate-Paperspace-Template.git
 ```
 
 ## Usage

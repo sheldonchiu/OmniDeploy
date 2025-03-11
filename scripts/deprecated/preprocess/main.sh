@@ -15,12 +15,12 @@ if [[ "$REINSTALL_PREPROCESS" || ! -f "/tmp/preprocess.prepared" ]]; then
 
     TARGET_REPO_DIR=$PREPROCESS_REPO_DIR \
     TARGET_REPO_BRANCH="main" \
-    TARGET_REPO_URL="https://github.com/sheldonchiu/paperspace-sd-auto-preprocess.git" \
+    TARGET_REPO_URL="https://github.com/sheldonxxxx/paperspace-sd-auto-preprocess.git" \
     prepare_repo
 
     TARGET_REPO_DIR=$TRAINER_REPO_DIR \
     TARGET_REPO_BRANCH="sdxl" \
-    TARGET_REPO_URL="https://github.com/sheldonchiu/kohya-trainer-paperspace.git" \
+    TARGET_REPO_URL="https://github.com/sheldonxxxx/kohya-trainer-paperspace.git" \
     UPDATE_REPO="auto" \
     prepare_repo  
     rm -rf $VENV_DIR/preprocess-env

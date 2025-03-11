@@ -15,7 +15,7 @@ if [[ "$REINSTALL_KOSMOS2" || ! -f "/tmp/kosmos2.prepared" ]]; then
 
     TARGET_REPO_DIR=$REPO_DIR \
     TARGET_REPO_BRANCH="master" \
-    TARGET_REPO_URL="https://github.com/sheldonchiu/unilm.git" \
+    TARGET_REPO_URL="https://github.com/sheldonxxxx/unilm.git" \
     UPDATE_REPO="auto" \
     prepare_repo
 
