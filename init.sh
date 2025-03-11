@@ -1,5 +1,5 @@
 #!/bin/bash
-# apt-get -qq update && apt-get install -y curl > /dev/null && curl -s https://raw.githubusercontent.com/sheldonxxxx/OmniDeploy/refs/heads/dev/init.sh | bash
+# docker run -it --rm -v /root:/data -p 8888:8888 --gpus all a50d89ca31b2 /bin/bash -c "apt-get -qq update && apt-get install -y curl > /dev/null && curl -s https://raw.githubusercontent.com/sheldonxxxx/OmniDeploy/refs/heads/dev/init.sh | bash && /bin/bash"
 set -e
 
 # Update and install dependencies with reduced verbosity
@@ -16,5 +16,3 @@ git clone -q https://github.com/sheldonxxxx/OmniDeploy.git > /dev/null
 cd "$WORKING_DIR/OmniDeploy"
 git checkout dev
 bash entry.sh
-
-source ~/.bashrc

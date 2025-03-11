@@ -83,9 +83,9 @@ if [[ ! -f "/tmp/prepared" ]]; then
 
   # Check if caddy is already running and reload, otherwise start it
   if pgrep caddy > /dev/null; then
-      /usr/bin/caddy reload --config /etc/caddy/Caddyfile
+      /usr/bin/caddy reload --config /etc/caddy/Caddyfile > /dev/null
   else
-      /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid
+      /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid > /dev/null
   fi
 
 fi 

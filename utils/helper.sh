@@ -85,27 +85,27 @@ prepare_repo(){
       if [[ ! -d "$TARGET_REPO_DIR/.git" ]]; then
           mkdir -p "$TARGET_REPO_DIR"
           cd "$TARGET_REPO_DIR"
-          git init
-          git remote add origin $TARGET_REPO_URL
-          git fetch
+          git init > /dev/null
+          git remote add origin $TARGET_REPO_URL > /dev/null
+          git fetch > /dev/null
           if [[ -n $TARGET_REPO_BRANCH ]]; then
-              git checkout -t origin/$TARGET_REPO_BRANCH -f
+              git checkout -t origin/$TARGET_REPO_BRANCH -f > /dev/null
           else
-              git checkout -t origin/master -f
+              git checkout -t origin/master -f > /dev/null
           fi
       fi
 
       if [[ $UPDATE_REPO == "auto" ]]; then
           log "Updating Repo $TARGET_REPO_DIR ..."
           cd $TARGET_REPO_DIR
-          git fetch
-          git checkout $TARGET_REPO_BRANCH
-          git pull
+          git fetch > /dev/null
+          git checkout $TARGET_REPO_BRANCH > /dev/null
+          git pull > /dev/null
       elif [[ $UPDATE_REPO == "commit" ]]; then
           log "Updating $TARGET_REPO_DIR to commit $UPDATE_REPO_COMMIT..."
           cd $TARGET_REPO_DIR
-          git fetch
-          git checkout $UPDATE_REPO_COMMIT
+          git fetch > /dev/null
+          git checkout $UPDATE_REPO_COMMIT > /dev/null
       fi
   fi
 }

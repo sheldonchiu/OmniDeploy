@@ -405,7 +405,7 @@ run_scripts() {
       folder_path=$(dirname "$rel_path")
       
       # Skip files in deprecated folder or its subfolders
-      if [[ "$rel_path" == deprecated/* ]]; then
+      if [[ "$rel_path" == deprecated/* || "$rel_path" == */cloudflared ]]; then
         continue
       fi
       
