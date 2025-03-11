@@ -58,7 +58,7 @@ show_main_menu() {
   
   case "$selection" in
     "Run Scripts")
-      run_yaml_scripts
+      run_scripts
       ;;
     "Manage Processes")
       manage_pid_processes
