@@ -49,12 +49,12 @@ if [[ ! -f "/tmp/prepared" ]]; then
   mkdir -p /etc/apt/keyrings
   # Download and add the GPG key, skipping if it already exists
   if [ ! -f /etc/apt/keyrings/charm.gpg ]; then
-    curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+    curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg > /dev/null
   fi
 
   # Add the repository to sources list if not already added
   if [ ! -f /etc/apt/sources.list.d/charm.list ]; then
-    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
+    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list > /dev/null
   fi
   apt-get -qq update && apt-get install gum > /dev/null
 
@@ -70,11 +70,11 @@ if [[ ! -f "/tmp/prepared" ]]; then
   apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl > /dev/null
   
   if [ ! -f /usr/share/keyrings/caddy-stable-archive-keyring.gpg ]; then
-    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' |  gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' |  gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg > /dev/null
   fi
 
   if [ ! -f /etc/apt/sources.list.d/caddy-stable.list ]; then
-    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list > /dev/null
   fi
   apt-get -qq update
   apt-get install -y caddy > /dev/null
@@ -83,9 +83,9 @@ if [[ ! -f "/tmp/prepared" ]]; then
 
   # Check if caddy is already running and reload, otherwise start it
   if pgrep caddy > /dev/null; then
-      /usr/bin/caddy reload --config /etc/caddy/Caddyfile > /dev/null
+      /usr/bin/caddy reload --config /etc/caddy/Caddyfile >/dev/null 2>&1
   else
-      /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid > /dev/null
+      /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid >/dev/null 2>&1
   fi
 
 fi 
