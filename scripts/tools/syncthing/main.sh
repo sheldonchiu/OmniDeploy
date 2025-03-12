@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Syncthing ###"
 log "Setting up Syncthing"
-if [[ "$REINSTALL_SYNCTHING" || ! -f "/tmp/syncthing.prepared" ]]; then
+if [[ "$REINSTALL_SYNCTHING" || ! -f "$VENV_DIR/syncthing.prepared" ]]; then
 
     
     rm -rf $VENV_DIR/syncthing-env
@@ -20,7 +20,7 @@ if [[ "$REINSTALL_SYNCTHING" || ! -f "/tmp/syncthing.prepared" ]]; then
     curl -L https://github.com/syncthing/syncthing/releases/download/v1.29.2/syncthing-linux-amd64-v1.29.2.tar.gz | tar -xz
     mv syncthing-linux-amd64-v1.29.2/syncthing $VENV_DIR/bin
     
-    touch /tmp/syncthing.prepared
+    touch $VENV_DIR/syncthing.prepared
 else
     
     log "Environment already prepared"

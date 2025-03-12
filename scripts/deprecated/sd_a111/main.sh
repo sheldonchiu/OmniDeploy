@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Stable Diffusion WebUI ###"
 log "Setting up Stable Diffusion WebUI"
-if [[ "$REINSTALL_SD_A111" || ! -f "/tmp/sd_a111.prepared" ]]; then
+if [[ "$REINSTALL_SD_A111" || ! -f "$VENV_DIR/sd_a111.prepared" ]]; then
 
     TARGET_REPO_URL="https://github.com/AUTOMATIC1111/stable-diffusion-webui.git" \
     TARGET_REPO_DIR=$REPO_DIR \
@@ -59,7 +59,7 @@ if [[ "$REINSTALL_SD_A111" || ! -f "/tmp/sd_a111.prepared" ]]; then
 
     $UV_INSTALL_DIR/uv pip install xformers
     
-    touch /tmp/sd_a111.prepared
+    touch $VENV_DIR/sd_a111.prepared
 else
     
     source $VENV_DIR/sd_a111-env/bin/activate

@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Ollama ###"
 log "Setting up Ollama"
-if [[ "$REINSTALL_OLLAMA" || ! -f "/tmp/ollama.prepared" ]]; then
+if [[ "$REINSTALL_OLLAMA" || ! -f "$VENV_DIR/ollama.prepared" ]]; then
 
     
     rm -rf $VENV_DIR/ollama-env
@@ -22,7 +22,7 @@ if [[ "$REINSTALL_OLLAMA" || ! -f "/tmp/ollama.prepared" ]]; then
 
     curl -L https://ollama.com/download/ollama-linux-amd64.tgz | tar -C /usr -xzf -
     
-    touch /tmp/ollama.prepared
+    touch $VENV_DIR/ollama.prepared
 else
     
     log "Environment already prepared"

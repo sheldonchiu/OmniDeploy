@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Command Server ###"
 log "Setting up Command Server"
-if [[ "$REINSTALL_COMMAND" || ! -f "/tmp/command.prepared" ]]; then
+if [[ "$REINSTALL_COMMAND" || ! -f "$VENV_DIR/command.prepared" ]]; then
 
     
     rm -rf $VENV_DIR/command-env
@@ -24,7 +24,7 @@ if [[ "$REINSTALL_COMMAND" || ! -f "/tmp/command.prepared" ]]; then
     
     $UV_INSTALL_DIR/uv pip install -r requirements.txt
     
-    touch /tmp/command.prepared
+    touch $VENV_DIR/command.prepared
 else
     
     source $VENV_DIR/command-env/bin/activate

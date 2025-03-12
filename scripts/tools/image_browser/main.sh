@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Image Browser ###"
 log "Setting up Image Browser"
-if [[ "$REINSTALL_IMAGE_BROWSER" || ! -f "/tmp/image_browser.prepared" ]]; then
+if [[ "$REINSTALL_IMAGE_BROWSER" || ! -f "$VENV_DIR/image_browser.prepared" ]]; then
 
     TARGET_REPO_URL="https://github.com/zanllp/sd-webui-infinite-image-browsing.git" \
     TARGET_REPO_DIR=$REPO_DIR \
@@ -29,7 +29,7 @@ if [[ "$REINSTALL_IMAGE_BROWSER" || ! -f "/tmp/image_browser.prepared" ]]; then
     cd $REPO_DIR
     $UV_INSTALL_DIR/uv pip install -r requirements.txt
     
-    touch /tmp/image_browser.prepared
+    touch $VENV_DIR/image_browser.prepared
 else
     
     source $VENV_DIR/image_browser-env/bin/activate

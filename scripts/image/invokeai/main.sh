@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up InvokeAI ###"
 log "Setting up InvokeAI"
-if [[ "$REINSTALL_INVOKEAI" || ! -f "/tmp/invokeai.prepared" ]]; then
+if [[ "$REINSTALL_INVOKEAI" || ! -f "$VENV_DIR/invokeai.prepared" ]]; then
 
     mkdir -p $DATA_DIR/invokeai_models
     mkdir -p $INVOKEAI_ROOT/models
@@ -38,7 +38,7 @@ if [[ "$REINSTALL_INVOKEAI" || ! -f "/tmp/invokeai.prepared" ]]; then
 
     $UV_INSTALL_DIR/uv pip install invokeai --index https://download.pytorch.org/whl/cu124
     
-    touch /tmp/invokeai.prepared
+    touch $VENV_DIR/invokeai.prepared
 else
     
     source $VENV_DIR/invokeai-env/bin/activate

@@ -34,7 +34,7 @@ mkdir -p $ROOT_REPO_DIR/settings
 mkdir -p $VENV_DIR
 mkdir -p $LOG_DIR
 
-if [[ ! -f "/tmp/prepared" ]]; then
+if [[ ! -f "$VEMV/prepared" ]]; then
 
   echo "Installing common dependencies"
   apt-get update -qq
@@ -85,7 +85,7 @@ if [[ ! -f "/tmp/prepared" ]]; then
   if pgrep caddy > /dev/null; then
       /usr/bin/caddy reload --config /etc/caddy/Caddyfile >/dev/null 2>&1
   else
-      /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid >/dev/null 2>&1
+      /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid > /dev/null 2>&1
   fi
 
 fi 

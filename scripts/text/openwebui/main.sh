@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Open WebUI ###"
 log "Setting up Open WebUI"
-if [[ "$REINSTALL_OPENWEBUI" || ! -f "/tmp/openwebui.prepared" ]]; then
+if [[ "$REINSTALL_OPENWEBUI" || ! -f "$VENV_DIR/openwebui.prepared" ]]; then
 
     
     rm -rf $VENV_DIR/openwebui-env
@@ -24,7 +24,7 @@ if [[ "$REINSTALL_OPENWEBUI" || ! -f "/tmp/openwebui.prepared" ]]; then
     
     $UV_INSTALL_DIR/uv pip install -U open-webui
     
-    touch /tmp/openwebui.prepared
+    touch $VENV_DIR/openwebui.prepared
 else
     
     source $VENV_DIR/openwebui-env/bin/activate

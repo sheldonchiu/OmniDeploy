@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Stable Diffusion Forge ###"
 log "Setting up Stable Diffusion Forge"
-if [[ "$REINSTALL_SD_FORGE" || ! -f "/tmp/sd_forge.prepared" ]]; then
+if [[ "$REINSTALL_SD_FORGE" || ! -f "$VENV_DIR/sd_forge.prepared" ]]; then
 
     TARGET_REPO_URL="https://github.com/lllyasviel/stable-diffusion-webui-forge.git" \
     TARGET_REPO_DIR=$REPO_DIR \
@@ -50,7 +50,7 @@ if [[ "$REINSTALL_SD_FORGE" || ! -f "/tmp/sd_forge.prepared" ]]; then
 
     $UV_INSTALL_DIR/uv pip3 install -U xformers==0.0.28.post1 --index-url https://download.pytorch.org/whl/cu124
     
-    touch /tmp/sd_forge.prepared
+    touch $VENV_DIR/sd_forge.prepared
 else
     
     source $VENV_DIR/sd_forge-env/bin/activate

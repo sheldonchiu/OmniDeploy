@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Kosmos2 ###"
 log "Setting up Kosmos2"
-if [[ "$REINSTALL_KOSMOS2" || ! -f "/tmp/kosmos2.prepared" ]]; then
+if [[ "$REINSTALL_KOSMOS2" || ! -f "$VENV_DIR/kosmos2.prepared" ]]; then
 
     TARGET_REPO_DIR=$REPO_DIR \
     TARGET_REPO_BRANCH="master" \
@@ -78,7 +78,7 @@ if [[ "$REINSTALL_KOSMOS2" || ! -f "/tmp/kosmos2.prepared" ]]; then
     esac
     cd $REPO_DIR
     
-    touch /tmp/kosmos2.prepared
+    touch $VENV_DIR/kosmos2.prepared
 else
     
     source $VENV_DIR/kosmos2-env/bin/activate

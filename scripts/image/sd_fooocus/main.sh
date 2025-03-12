@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Stable Diffusion Fooocus ###"
 log "Setting up Stable Diffusion Fooocus"
-if [[ "$REINSTALL_SD_FOOOCUS" || ! -f "/tmp/sd_fooocus.prepared" ]]; then
+if [[ "$REINSTALL_SD_FOOOCUS" || ! -f "$VENV_DIR/sd_fooocus.prepared" ]]; then
 
     
     if [ -f $REPO_DIR/webui.py && ! -n "${CF_TOKEN}" ]; then
@@ -50,7 +50,7 @@ if [[ "$REINSTALL_SD_FOOOCUS" || ! -f "/tmp/sd_fooocus.prepared" ]]; then
     $UV_INSTALL_DIR/uv pip install torch==2.1.0 torchvision==0.16.0 --extra-index-url https://download.pytorch.org/whl/cu121
     $UV_INSTALL_DIR/uv pip install -r requirements_versions.txt
     
-    touch /tmp/sd_fooocus.prepared
+    touch $VENV_DIR/sd_fooocus.prepared
 else
     
     source $VENV_DIR/sd_fooocus-env/bin/activate

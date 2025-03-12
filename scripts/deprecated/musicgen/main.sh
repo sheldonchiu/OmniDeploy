@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Musicgen ###"
 log "Setting up Musicgen"
-if [[ "$REINSTALL_MUSICGEN" || ! -f "/tmp/musicgen.prepared" ]]; then
+if [[ "$REINSTALL_MUSICGEN" || ! -f "$VENV_DIR/musicgen.prepared" ]]; then
 
     TARGET_REPO_DIR=$REPO_DIR \
     TARGET_REPO_BRANCH="main" \
@@ -31,7 +31,7 @@ if [[ "$REINSTALL_MUSICGEN" || ! -f "/tmp/musicgen.prepared" ]]; then
     $UV_INSTALL_DIR/uv pip install 'torch>=2.0'
     $UV_INSTALL_DIR/uv pip install -e .
     
-    touch /tmp/musicgen.prepared
+    touch $VENV_DIR/musicgen.prepared
 else
     
     source $VENV_DIR/musicgen-env/bin/activate

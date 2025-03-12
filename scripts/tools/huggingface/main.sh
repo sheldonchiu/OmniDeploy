@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up HuggingFace Hub ###"
 log "Setting up HuggingFace Hub"
-if [[ "$REINSTALL_HUGGINGFACE" || ! -f "/tmp/huggingface.prepared" ]]; then
+if [[ "$REINSTALL_HUGGINGFACE" || ! -f "$VENV_DIR/huggingface.prepared" ]]; then
 
     
     rm -rf $VENV_DIR/huggingface-env
@@ -24,7 +24,7 @@ if [[ "$REINSTALL_HUGGINGFACE" || ! -f "/tmp/huggingface.prepared" ]]; then
     
     $UV_INSTALL_DIR/uv pip install --upgrade huggingface_hub
     
-    touch /tmp/huggingface.prepared
+    touch $VENV_DIR/huggingface.prepared
 else
     
     source $VENV_DIR/huggingface-env/bin/activate

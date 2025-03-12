@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Oobabooga Text generation Webui ###"
 log "Setting up Oobabooga Text generation Webui"
-if [[ "$REINSTALL_OOBABOOGA" || ! -f "/tmp/oobabooga.prepared" ]]; then
+if [[ "$REINSTALL_OOBABOOGA" || ! -f "$VENV_DIR/oobabooga.prepared" ]]; then
 
     # Remove stale symlink to avoid pull conflicts
     rm -rf $LINK_MODEL_TO
@@ -34,7 +34,7 @@ if [[ "$REINSTALL_OOBABOOGA" || ! -f "/tmp/oobabooga.prepared" ]]; then
     uv pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
     uv pip install -r requirements.txt
     
-    touch /tmp/oobabooga.prepared
+    touch $VENV_DIR/oobabooga.prepared
 else
     
     source $VENV_DIR/oobabooga-env/bin/activate

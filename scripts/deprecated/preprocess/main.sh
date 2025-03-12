@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up preprocess ###"
 log "Setting up preprocess"
-if [[ "$REINSTALL_PREPROCESS" || ! -f "/tmp/preprocess.prepared" ]]; then
+if [[ "$REINSTALL_PREPROCESS" || ! -f "$VENV_DIR/preprocess.prepared" ]]; then
 
     TARGET_REPO_DIR=$PREPROCESS_REPO_DIR \
     TARGET_REPO_BRANCH="main" \
@@ -39,7 +39,7 @@ if [[ "$REINSTALL_PREPROCESS" || ! -f "/tmp/preprocess.prepared" ]]; then
       ln -s /tmp /notebooks/tmp
     fi
     
-    touch /tmp/preprocess.prepared
+    touch $VENV_DIR/preprocess.prepared
 else
     
     source $VENV_DIR/preprocess-env/bin/activate

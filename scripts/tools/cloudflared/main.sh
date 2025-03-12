@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Cloudflare Tunnel ###"
 log "Setting up Cloudflare Tunnel"
-if [[ "$REINSTALL_CLOUDFLARED" || ! -f "/tmp/cloudflared.prepared" ]]; then
+if [[ "$REINSTALL_CLOUDFLARED" || ! -f "$VENV_DIR/cloudflared.prepared" ]]; then
 
     
     rm -rf $VENV_DIR/cloudflared-env
@@ -25,7 +25,7 @@ if [[ "$REINSTALL_CLOUDFLARED" || ! -f "/tmp/cloudflared.prepared" ]]; then
     curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
     dpkg -i cloudflared.deb
     
-    touch /tmp/cloudflared.prepared
+    touch $VENV_DIR/cloudflared.prepared
 else
     
     log "Environment already prepared"

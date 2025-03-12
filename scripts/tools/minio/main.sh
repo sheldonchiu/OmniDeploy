@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up Minio ###"
 log "Setting up Minio"
-if [[ "$REINSTALL_MINIO" || ! -f "/tmp/minio.prepared" ]]; then
+if [[ "$REINSTALL_MINIO" || ! -f "$VENV_DIR/minio.prepared" ]]; then
 
     
     rm -rf $VENV_DIR/minio-env
@@ -24,7 +24,7 @@ if [[ "$REINSTALL_MINIO" || ! -f "/tmp/minio.prepared" ]]; then
     export PATH=$PATH:/tmp/minio-binaries/
     echo "export PATH=\$PATH:/tmp/minio-binaries/" >> /etc/bash.bashrc
     
-    touch /tmp/minio.prepared
+    touch $VENV_DIR/minio.prepared
 else
     
     log "Environment already prepared"

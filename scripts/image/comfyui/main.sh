@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up ComfyUI ###"
 log "Setting up ComfyUI"
-if [[ "$REINSTALL_COMFYUI" || ! -f "/tmp/comfyui.prepared" ]]; then
+if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
 
     
     TARGET_REPO_URL="https://github.com/comfyanonymous/ComfyUI.git" \
@@ -38,7 +38,7 @@ if [[ "$REINSTALL_COMFYUI" || ! -f "/tmp/comfyui.prepared" ]]; then
       git clone https://github.com/ltdrdata/ComfyUI-Manager comfyui-manager
     fi
     
-    touch /tmp/comfyui.prepared
+    touch $VENV_DIR/comfyui.prepared
 else
     
     source $VENV_DIR/comfyui-env/bin/activate

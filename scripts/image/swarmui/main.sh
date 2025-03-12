@@ -11,7 +11,7 @@ trap 'error_exit "### ERROR ###"' ERR
 
 echo "### Setting up SwarmUI ###"
 log "Setting up SwarmUI"
-if [[ "$REINSTALL_SWARMUI" || ! -f "/tmp/swarmui.prepared" ]]; then
+if [[ "$REINSTALL_SWARMUI" || ! -f "$VENV_DIR/swarmui.prepared" ]]; then
 
     
     TARGET_REPO_URL="https://github.com/mcmonkeyprojects/SwarmUI.git" \
@@ -35,7 +35,7 @@ if [[ "$REINSTALL_SWARMUI" || ! -f "/tmp/swarmui.prepared" ]]; then
 
     $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
     
-    touch /tmp/swarmui.prepared
+    touch $VENV_DIR/swarmui.prepared
 else
     
     source $VENV_DIR/swarmui-env/bin/activate
