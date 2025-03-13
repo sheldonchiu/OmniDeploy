@@ -207,17 +207,12 @@ update_project() {
 manage_pid_processes() {
   echo -e "${BLUE}=== Manage Processes ===${NC}"
   
-  # Arrays to store valid PID files and process names
-  pid_files=()
-  pid_names=()
-  pid_numbers=()
-  
   echo -e "${YELLOW}Scanning for active processes...${NC}"
   
   # Look for all .pid files in /tmp and check if PIDs still exist
   find_active_services()
   
-  if [ ${#pid_files[@]} -eq 0 ]; then
+  if [ ${#PID_FILES[@]} -eq 0 ]; then
     echo -e "${YELLOW}No active processes found with PID files in /tmp.${NC}"
     
     # Wait for user to press Enter or ESC

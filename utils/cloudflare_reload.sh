@@ -34,7 +34,7 @@ find_active_services()
 # IFS=',' read -ra scripts <<< "$pid_names_csv"
 
 # Loop through each script and execute the corresponding case
-for script in "${pid_names[@]}"
+for script in "${$PID_NAMES[@]}"
 do
   cd "$SCRIPT_ROOT_DIR" || exit 1
   
