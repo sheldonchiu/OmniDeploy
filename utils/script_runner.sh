@@ -52,6 +52,7 @@ show_main_menu() {
   options=(
     "Run Scripts"
     "Manage Processes"
+    "Run Status Monitor"
     "Use Cloudflare Tunnel"
     "Update Project"
     "View Documentation"
