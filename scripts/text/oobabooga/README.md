@@ -1,0 +1,3 @@
+# Oobabooga Text generation Webui
+
+Oobabooga Text Generation WebUI is a Gradio web UI for Large Language Models that supports multiple inference backends, including Transformers, llama.cpp, and ExLlamaV2. It also has an OpenAI-compatible API with Chat and Completions endpoints. The platform aims to be the textual equivalent of AUTOMATIC1111/stable-diffusion-webui, a well-grounded, open-source browser interface designed for deploying Stable Diffusion image generation AI models. Oobabooga Text Generation WebUI is compatible with various models, including those from major model formats, and is quick to adopt new ones.

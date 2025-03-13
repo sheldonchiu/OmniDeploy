@@ -3,4 +3,5 @@ __pycache__/
 fastchat/weight.sh
 test.py
 *.db
-venv/
+.venv/
+fun/.env

@@ -154,6 +154,15 @@
     }
 
     
+    redir /openwebui /openwebui/ 301
+    handle_path /openwebui/* {
+        
+        import cors-api
+        reverse_proxy localhost:7021
+        
+    }
+
+    
     redir /oobabooga /oobabooga/ 301
     handle_path /oobabooga/* {
         
