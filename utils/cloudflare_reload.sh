@@ -28,14 +28,13 @@ cd $SCRIPT_ROOT_DIR
 PORT_MAPPING=""
 EXPOSE_PORTS=""
 
-# Read the RUN_SCRIPT environment variable
-run_script="$RUN_SCRIPT"
+find_active_services()
 
 # Separate the variable by commas
-IFS=',' read -ra scripts <<< "$run_script"
+# IFS=',' read -ra scripts <<< "$pid_names_csv"
 
 # Loop through each script and execute the corresponding case
-for script in "${scripts[@]}"
+for script in "${pid_names[@]}"
 do
   cd "$SCRIPT_ROOT_DIR" || exit 1
   

@@ -34,7 +34,7 @@ mkdir -p $ROOT_REPO_DIR/settings
 mkdir -p $VENV_DIR
 mkdir -p $LOG_DIR
 
-if [[ ! -f "$VEMV/prepared" ]]; then
+if [[ ! -f "$VENV/prepared" ]]; then
 
   echo "Installing common dependencies"
   apt-get update -qq
@@ -90,7 +90,7 @@ if [[ ! -f "$VEMV/prepared" ]]; then
 
 fi 
 
-touch $VEMV/prepared
+touch $VENV/prepared
 
 # Read the RUN_SCRIPT environment variable
 run_script="$RUN_SCRIPT"
