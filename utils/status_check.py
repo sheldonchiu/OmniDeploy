@@ -1,7 +1,12 @@
 #!/usr/local/bin/python
 import os
-import psutil
 import subprocess
+
+try:
+    import psutil
+except ImportError:
+    subprocess.check_call(['pip', 'install', 'psutil'])
+    import psutil
 
 try:
     from prettytable import PrettyTable
