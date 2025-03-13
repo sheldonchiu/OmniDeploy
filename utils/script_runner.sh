@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Script name: yaml-script-runner.sh
+# Script name: script-runner.sh
 
 set -e  # Exit on error
 
@@ -68,6 +68,9 @@ show_main_menu() {
   "Manage Processes")
     manage_pid_processes
     ;;
+  "Run Status Monitor")
+    run_status_monitor
+  ;;
   "Use Cloudflare Tunnel")
     use_cloudflare_tunnel
     ;;
@@ -570,7 +573,7 @@ configure_settings() {
 }
 
 # Function to show help
-show_help() {
+show_documentation() {
   echo -e "${BLUE}=== Help ===${NC}"
   echo -e "This script allows you to run YAML-configured scripts through a menu interface."
   echo -e ""
