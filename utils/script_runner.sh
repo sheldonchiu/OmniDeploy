@@ -5,7 +5,10 @@
 set -e  # Exit on error
 
 DIR=$(dirname "$(realpath "$0")")
-cd $DIR/..
+cd $DIR
+source helper.sh
+
+cd ..
 source .env
 
 # Colors for output
@@ -598,7 +601,6 @@ show_help() {
   echo -e "${YELLOW}Process Management:${NC}"
   echo -e "  - Lists all PID files found in /tmp"
   echo -e "  - Allows you to select processes to stop"
-  echo -e "  - Uses the kill_pid function from helper.sh to safely stop processes"
   echo -e ""
   echo -e "${YELLOW}Script Requirements:${NC}"
   echo -e "  - YAML files should include 'title', 'name' and optionally 'description'"
