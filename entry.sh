@@ -90,7 +90,7 @@ if [[ ! -f "$VEMV/prepared" ]]; then
 
 fi 
 
-touch /tmp/prepared
+touch $VEMV/prepared
 
 # Read the RUN_SCRIPT environment variable
 run_script="$RUN_SCRIPT"
