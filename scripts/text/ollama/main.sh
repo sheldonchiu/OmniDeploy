@@ -31,6 +31,23 @@ fi
 log "Finished Preparing Environment for Ollama"
 
 
+if [[ -z "$SKIP_MODEL_DOWNLOAD" ]]; then
+  echo "### Downloading Model for Ollama ###"
+  log "Downloading Model for Ollama"
+  IFS=',' read -ra ollama_model_list <<< "$OLLAMA_MODEL_LIST"
+  ollama_args=""
+  if [[ -n "$OLLAMA_USE_INSECURE" ]]; then
+    ollama_args="--insecure"
+  fi
+  for model in "${ollama_model_list[@]}"
+  do
+    ollama pull "$model" $ollama_args
+  done
+  log "Finished Downloading Models for Ollama"
+else
+  log "Skipping Model Download for Ollama"
+fi
+
 
 
 

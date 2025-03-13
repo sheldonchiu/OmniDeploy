@@ -18,6 +18,17 @@ start: |-
   PYTHONUNBUFFERED=1 service_loop "/usr/bin/ollama serve" > $LOG_DIR/{{ name }}.log 2>&1 &
   echo $! > /tmp/{{ name }}.pid
 
+download_model: |-
+  IFS=',' read -ra ollama_model_list <<< "$OLLAMA_MODEL_LIST"
+  ollama_args=""
+  if [[ -n "$OLLAMA_USE_INSECURE" ]]; then
+    ollama_args="--insecure"
+  fi
+  for model in "${ollama_model_list[@]}"
+  do
+    ollama pull "$model" $ollama_args
+  done
+
 custom_start: ""
 custom_reload: ""
 custom_stop: ""
