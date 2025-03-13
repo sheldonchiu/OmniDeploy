@@ -213,7 +213,7 @@ manage_pid_processes() {
   echo -e "${YELLOW}Scanning for active processes...${NC}"
   
   # Look for all .pid files in /tmp and check if PIDs still exist
-  find_active_services()
+  find_active_services
   
   if [ ${#PID_FILES[@]} -eq 0 ]; then
     echo -e "${YELLOW}No active processes found with PID files in /tmp.${NC}"
@@ -227,8 +227,8 @@ manage_pid_processes() {
   
   # Create display options with PID information
   display_options=()
-  for i in "${!pid_names[@]}"; do
-    display_options+=("$i:${pid_names[$i]} (PID: ${pid_numbers[$i]})")
+  for i in "${!PID_NAMES[@]}"; do
+    display_options+=("$i:${PID_NAMES[$i]} (PID: ${PID_NUMBERS[$i]})")
   done
   
   echo -e "${YELLOW}Select processes to manage (use Tab or Ctrl+Space to select multiple, Enter to confirm):${NC}"
@@ -257,8 +257,8 @@ manage_pid_processes() {
   echo -e "${GREEN}${action}ing selected processes:${NC}"
   
   for index in $selected_indices; do
-    selected_name="${pid_names[$index]}"
-    selected_pid="${pid_numbers[$index]}"
+    selected_name="${PID_NAMES[$index]}"
+    selected_pid="${PID_NUMBERS[$index]}"
     
     echo -e "  - $selected_name (PID: $selected_pid)"
     
@@ -286,7 +286,7 @@ manage_pid_processes() {
       # Verify the action result
       if [ "$action_cmd" = "stop" ]; then
         # For stop action, check if process is still running
-        if kill -0 "${pid_numbers[$index]}" 2>/dev/null; then
+        if kill -0 "${PID_NUMBERS[$index]}" 2>/dev/null; then
           echo -e "${RED}Process is still running. Control script may have failed.${NC}"
         else
           echo -e "${GREEN}Process stopped successfully.${NC}"
@@ -601,6 +601,7 @@ show_help() {
   echo -e "${YELLOW}Process Management:${NC}"
   echo -e "  - Lists all PID files found in /tmp"
   echo -e "  - Allows you to select processes to stop"
+
   echo -e ""
   echo -e "${YELLOW}Script Requirements:${NC}"
   echo -e "  - YAML files should include 'title', 'name' and optionally 'description'"
