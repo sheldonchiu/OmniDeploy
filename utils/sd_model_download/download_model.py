@@ -110,38 +110,68 @@ def prepare_folder(name):
     os.makedirs(f"{model_storage_dir}/{name}",exist_ok=True)
     os.chdir(f"{model_storage_dir}/{name}")  
 
-prepare_folder("sd")
+prepare_folder("StableDiffusion")
 model_list = os.environ.get('MODEL_LIST', "").split(',')
 for uri in model_list:
     if uri != '':
         downlaod_model(uri)
 
-prepare_folder("lora")
+prepare_folder("Unet")
+model_list = os.environ.get('UNET_LIST', "").split(',')
+for uri in model_list:
+    if uri != '':
+        downlaod_model(uri)
+
+prepare_folder("TextEncoder")
+model_list = os.environ.get('TEXT_ENCODER_LIST', "").split(',')
+for uri in model_list:
+    if uri != '':
+        downlaod_model(uri)
+
+prepare_folder("Lora")
 lora_list = os.environ.get('LORA_LIST', "").split(',')
 for uri in lora_list:
     if uri != '':
         downlaod_model(uri)
+        
+prepare_folder("IpAdapter")
+lora_list = os.environ.get('IPADAPTER_LIST', "").split(',')
+for uri in lora_list:
+    if uri != '':
+        downlaod_model(uri)
 
-prepare_folder("controlnet")
+prepare_folder("ControlNet")
 controlnet_list = os.environ.get('CONTROLNET_LIST', "").split(',')
 for uri in controlnet_list:
     if uri != '':
         downlaod_model(uri)
 
-prepare_folder("vae")
+prepare_folder("VAE")
 vae_list = os.environ.get('VAE_LIST', "").split(',')
 for uri in vae_list:
     if uri != '':
         downlaod_model(uri)
         
-prepare_folder("embedding") 
+prepare_folder("TextualInversion") 
 embedding_list = os.environ.get('EMBEDDING_LIST', "").split(',')
 for uri in embedding_list:
     if uri != '':
         downlaod_model(uri)
         
-prepare_folder("upscaler") 
-upscaler_list = os.environ.get('UPSCALER_LIST', "").split(',')
+prepare_folder("ESRGAN") 
+upscaler_list = os.environ.get('ESRGAN_LIST', "").split(',')
+for uri in upscaler_list:
+    if uri != '':
+        downlaod_model(uri)
+
+prepare_folder("RealESRGAN") 
+upscaler_list = os.environ.get('RealESRGAN_LIST', "").split(',')
+for uri in upscaler_list:
+    if uri != '':
+        downlaod_model(uri)
+        
+prepare_folder("SwinIR") 
+upscaler_list = os.environ.get('SwinIR_LIST', "").split(',')
 for uri in upscaler_list:
     if uri != '':
         downlaod_model(uri)
