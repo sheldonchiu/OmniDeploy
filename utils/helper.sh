@@ -198,3 +198,33 @@ service_loop(){
     fi
   done
 }
+
+function find_active_services() {
+  local pid_files=()
+  local pid_names=()
+  local pid_numbers=()
+  
+  while IFS= read -r file; do
+    if [ -f "$file" ]; then
+      # Read the PID from the file
+      pid_number=$(cat "$file" 2>/dev/null | tr -d '\n\r')
+      
+      # Check if the content is a valid number and if the process exists
+      if [[ "$pid_number" =~ ^[0-9]+$ ]] && kill -0 "$pid_number" 2>/dev/null; then
+        pid_files+=("$file")
+        filename=$(basename "$file" .pid)
+        pid_names+=("$filename")
+        pid_numbers+=("$pid_number")
+      fi
+    fi
+  done < <(find /tmp -type f -name "*.pid" | sort)
+  
+  # Return the arrays by reference
+  # The caller can access these variables
+  declare -g PID_FILES=("${pid_files[@]}")
+  declare -g PID_NAMES=("${pid_names[@]}")
+  declare -g PID_NUMBERS=("${pid_numbers[@]}")
+  
+  return 0
+}
+

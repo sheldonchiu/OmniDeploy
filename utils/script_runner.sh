@@ -215,20 +215,7 @@ manage_pid_processes() {
   echo -e "${YELLOW}Scanning for active processes...${NC}"
   
   # Look for all .pid files in /tmp and check if PIDs still exist
-  while IFS= read -r file; do
-    if [ -f "$file" ]; then
-      # Read the PID from the file
-      pid_number=$(cat "$file" 2>/dev/null | tr -d '\n\r')
-      
-      # Check if the content is a valid number and if the process exists
-      if [[ "$pid_number" =~ ^[0-9]+$ ]] && kill -0 "$pid_number" 2>/dev/null; then
-        pid_files+=("$file")
-        filename=$(basename "$file" .pid)
-        pid_names+=("$filename")
-        pid_numbers+=("$pid_number")
-      fi
-    fi
-  done < <(find /tmp -type f -name "*.pid" | sort)
+  find_active_services()
   
   if [ ${#pid_files[@]} -eq 0 ]; then
     echo -e "${YELLOW}No active processes found with PID files in /tmp.${NC}"
