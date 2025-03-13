@@ -3,9 +3,8 @@ name: openwebui
 use_python: true
 python_version: "3.11"
 # Open WebUI does not support subpath, need to use with tunnel
-expose: false
+expose: true
 port: 7021
-
 
 prepare_env: |-
   $UV_INSTALL_DIR/uv pip install -U open-webui

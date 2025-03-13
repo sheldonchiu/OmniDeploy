@@ -20,7 +20,8 @@ if [[ "$REINSTALL_OLLAMA" || ! -f "$VENV_DIR/ollama.prepared" ]]; then
       rm -rf /usr/lib/ollama
     fi
 
-    curl -L https://ollama.com/download/ollama-linux-amd64.tgz | tar -C /usr -xzf -
+    curl -L -o /tmp/ollama-linux-amd64.tgz https://ollama.com/download/ollama-linux-amd64.tgz
+    tar -C /usr -xzf /tmp/ollama-linux-amd64.tgz
     
     touch $VENV_DIR/ollama.prepared
 else

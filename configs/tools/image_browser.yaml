@@ -1,4 +1,4 @@
-title: Image Browser
+title: SD webui infinite image browsing
 name: image_browser
 use_python: true
 expose: true
