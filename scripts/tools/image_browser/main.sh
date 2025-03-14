@@ -9,8 +9,8 @@ source .env
 trap 'error_exit "### ERROR ###"' ERR
 
 
-echo "### Setting up Image Browser ###"
-log "Setting up Image Browser"
+echo "### Setting up SD webui infinite image browsing ###"
+log "Setting up SD webui infinite image browsing"
 if [[ "$REINSTALL_IMAGE_BROWSER" || ! -f "$VENV_DIR/image_browser.prepared" ]]; then
 
     TARGET_REPO_URL="https://github.com/zanllp/sd-webui-infinite-image-browsing.git" \
@@ -35,7 +35,7 @@ else
     source $VENV_DIR/image_browser-env/bin/activate
     
 fi
-log "Finished Preparing Environment for Image Browser"
+log "Finished Preparing Environment for SD webui infinite image browsing"
 
 
 if [[ -n "${IMAGE_BROWSER_KEY}" ]]; then
@@ -50,8 +50,8 @@ fi
 
 
 if [[ -z "$INSTALL_ONLY" ]]; then
-  echo "### Starting Image Browser ###"
-  log "Starting Image Browser"
+  echo "### Starting SD webui infinite image browsing ###"
+  log "Starting SD webui infinite image browsing"
   if [ -n IMAGE_OUTPUTS_DIR ]; then
       cd $IMAGE_OUTPUTS_DIR
   else
@@ -62,7 +62,7 @@ if [[ -z "$INSTALL_ONLY" ]]; then
 fi
 
 
-send_to_discord "Image Browser Started"
+send_to_discord "SD webui infinite image browsing Started"
 
 if env | grep -q "PAPERSPACE"; then
   send_to_discord "Link: https://$PAPERSPACE_FQDN/image-browser/"

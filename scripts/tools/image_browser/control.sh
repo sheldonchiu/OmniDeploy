@@ -11,19 +11,19 @@ trap 'error_exit "### ERROR ###"' ERR
 echo "### Command received ###"
 file="/tmp/image_browser.pid"
 if [[ $1 == "reload" ]]; then
-    log "Reloading Image Browser"
+    log "Reloading SD webui infinite image browsing"
     
     kill_pid $file
     sleep 1
     bash main.sh
     
 elif [[ $1 == "start" ]]; then
-    log "Starting Image Browser"
+    log "Starting SD webui infinite image browsing"
     
     bash main.sh
     
 elif [[ $1 == "stop" ]]; then
-    log "Stopping Image Browser"
+    log "Stopping SD webui infinite image browsing"
         
     kill_pid $file
     
