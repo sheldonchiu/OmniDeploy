@@ -34,7 +34,7 @@ mkdir -p $ROOT_REPO_DIR/settings
 mkdir -p $VENV_DIR
 mkdir -p $LOG_DIR
 
-if [[ ! -f "$VENV_DIR/prepared" ]]; then
+if [[ ! -f "/tmp/prepared" ]]; then
 
   echo "Installing common dependencies"
   apt-get update -qq
@@ -81,7 +81,7 @@ if [[ ! -f "$VENV_DIR/prepared" ]]; then
 
   envsubst '$CADDY_IP $CADDY_PORT $LOG_DIR' < $WORKING_DIR/scripts/Caddyfile > /etc/caddy/Caddyfile
 
-  touch $VENV_DIR/prepared
+  touch /tmp/prepared
 
 fi 
 
