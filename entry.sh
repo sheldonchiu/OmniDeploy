@@ -81,16 +81,16 @@ if [[ ! -f "$VENV_DIR/prepared" ]]; then
 
   envsubst '$CADDY_IP $CADDY_PORT $LOG_DIR' < $WORKING_DIR/scripts/Caddyfile > /etc/caddy/Caddyfile
 
-  # Check if caddy is already running and reload, otherwise start it
-  if pgrep caddy > /dev/null; then
-      /usr/bin/caddy reload --config /etc/caddy/Caddyfile >/dev/null 2>&1
-  else
-      /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid > /dev/null 2>&1
-  fi
+  touch $VENV_DIR/prepared
 
 fi 
 
-touch $VENV_DIR/prepared
+# Check if caddy is already running and reload, otherwise start it
+if pgrep caddy > /dev/null; then
+    /usr/bin/caddy reload --config /etc/caddy/Caddyfile >/dev/null 2>&1
+else
+    /usr/bin/caddy start --config /etc/caddy/Caddyfile  --pidfile /tmp/caddy.pid > /dev/null 2>&1
+fi
 
 # Read the RUN_SCRIPT environment variable
 run_script="$RUN_SCRIPT"

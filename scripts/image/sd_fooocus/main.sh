@@ -53,6 +53,7 @@ if [[ "$REINSTALL_SD_FOOOCUS" || ! -f "$VENV_DIR/sd_fooocus.prepared" ]]; then
     touch $VENV_DIR/sd_fooocus.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 3.10
     source $VENV_DIR/sd_fooocus-env/bin/activate
     
 fi

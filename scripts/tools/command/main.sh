@@ -27,6 +27,7 @@ if [[ "$REINSTALL_COMMAND" || ! -f "$VENV_DIR/command.prepared" ]]; then
     touch $VENV_DIR/command.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 
     source $VENV_DIR/command-env/bin/activate
     
 fi

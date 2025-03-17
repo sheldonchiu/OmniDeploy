@@ -53,6 +53,7 @@ if [[ "$REINSTALL_SD_FORGE" || ! -f "$VENV_DIR/sd_forge.prepared" ]]; then
     touch $VENV_DIR/sd_forge.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 3.10
     source $VENV_DIR/sd_forge-env/bin/activate
     
 fi

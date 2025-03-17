@@ -38,6 +38,7 @@ if [[ "$REINSTALL_SWARMUI" || ! -f "$VENV_DIR/swarmui.prepared" ]]; then
     touch $VENV_DIR/swarmui.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 3.11
     source $VENV_DIR/swarmui-env/bin/activate
     
 fi

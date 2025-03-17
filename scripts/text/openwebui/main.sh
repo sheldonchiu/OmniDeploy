@@ -27,6 +27,7 @@ if [[ "$REINSTALL_OPENWEBUI" || ! -f "$VENV_DIR/openwebui.prepared" ]]; then
     touch $VENV_DIR/openwebui.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 3.11
     source $VENV_DIR/openwebui-env/bin/activate
     
 fi

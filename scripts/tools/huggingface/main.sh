@@ -27,6 +27,7 @@ if [[ "$REINSTALL_HUGGINGFACE" || ! -f "$VENV_DIR/huggingface.prepared" ]]; then
     touch $VENV_DIR/huggingface.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 
     source $VENV_DIR/huggingface-env/bin/activate
     
 fi

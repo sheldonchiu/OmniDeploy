@@ -41,6 +41,7 @@ if [[ "$REINSTALL_INVOKEAI" || ! -f "$VENV_DIR/invokeai.prepared" ]]; then
     touch $VENV_DIR/invokeai.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 3.11
     source $VENV_DIR/invokeai-env/bin/activate
     
 fi

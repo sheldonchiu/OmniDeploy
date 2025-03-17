@@ -37,6 +37,7 @@ if [[ "$REINSTALL_OOBABOOGA" || ! -f "$VENV_DIR/oobabooga.prepared" ]]; then
     touch $VENV_DIR/oobabooga.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 3.11
     source $VENV_DIR/oobabooga-env/bin/activate
     
 fi

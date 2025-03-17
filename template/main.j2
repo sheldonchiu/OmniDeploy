@@ -29,6 +29,7 @@ if [[ "$REINSTALL_{{ name|upper }}" || ! -f "$VENV_DIR/{{ name }}.prepared" ]]; 
     touch $VENV_DIR/{{ name }}.prepared
 else
     {% if use_python %}
+    $UV_INSTALL_DIR/uv python install {{ python_version }}
     source $VENV_DIR/{{ name }}-env/bin/activate
     {% else %}
     log "Environment already prepared"

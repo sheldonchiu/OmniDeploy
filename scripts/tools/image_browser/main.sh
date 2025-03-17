@@ -32,6 +32,7 @@ if [[ "$REINSTALL_IMAGE_BROWSER" || ! -f "$VENV_DIR/image_browser.prepared" ]]; 
     touch $VENV_DIR/image_browser.prepared
 else
     
+    $UV_INSTALL_DIR/uv python install 
     source $VENV_DIR/image_browser-env/bin/activate
     
 fi
