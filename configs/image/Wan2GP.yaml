@@ -1,0 +1,92 @@
+title: Wan2GP
+name: wan2gp
+use_python: true
+python_version: "3.10"
+expose: true
+port: 
+
+prepare_repo: |-
+
+  TARGET_REPO_URL="https://github.com/deepbeepmeep/Wan2GP.git" \
+  TARGET_REPO_DIR=$REPO_DIR \
+  UPDATE_REPO=${{ name|upper }}_UPDATE_REPO \
+  UPDATE_REPO_COMMIT=${{ name|upper }}_UPDATE_REPO_COMMIT \
+  prepare_repo 
+
+prepare_env: |-
+  python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
+
+  cd $REPO_DIR
+  $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
+  $UV_INSTALL_DIR/uv pip install -r requirements.txt
+
+  $UV_INSTALL_DIR/uv pip install sageattention==1.0.6 
+
+  cd "$REPO_DIR/custom_nodes"
+  if [[ ! -d "comfyui-manager" ]]; then
+    git clone https://github.com/ltdrdata/ComfyUI-Manager comfyui-manager
+  fi
+
+download_model: |-
+  bash $WORKING_DIR/utils/sd_model_download/main.sh
+
+action_before_start: ""
+
+start: |-
+  cd "$REPO_DIR"
+
+  
+  mkdir -p $ROOT_REPO_DIR/settings/{{ name }}
+  GRADIO_ROOT_PATH="/wan2gp" PYTHONUNBUFFERED=1 service_loop "python gradio_server.py --server-name 0.0.0.0 > $LOG_DIR/{{ name }}.log 2>&1 &
+   
+  echo $! > /tmp/{{ name }}.pid
+
+export_required_env: ""
+setup_env: |-
+  export MODEL_DIR="$DATA_DIR/models"
+  export HF_HOME="$DATA_DIR/hf"
+  export REPO_DIR="$ROOT_REPO_DIR/Wan2GP"
+
+  export {{ name|upper }}_PORT="{{ port }}"
+  export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
+  export PORT_MAPPING="$PORT_MAPPING:{{ name }}"
+  export HUGGINGFACE_TOKEN=$HF_TOKEN
+
+extra_files:
+  folder_mapping.json: |-
+    {
+      "checkpoints": "StableDiffusion",
+      "vae": "VAE",
+      "loras": [
+        "Lora",
+        "LyCORIS"
+      ],
+      "upscale_models": [
+        "ESRGAN",
+        "RealESRGAN",
+        "SwinIR"
+      ],
+      "embeddings": "TextualInversion",
+      "hypernetworks": "Hypernetwork",
+      "controlnet": [
+        "ControlNet",
+        "T2IAdapter"
+      ],
+      "text_encoders": "TextEncoder",
+      "clip_vision": "InvokeClipVision",
+      "diffusers": "Diffusers",
+      "gligen": "GLIGEN",
+      "vae_approx": "ApproxVAE",
+      "ipadapter": 
+        {
+          "base": "IpAdapter",
+          "sd15": "InvokeIpAdapters15",
+          "sdxl": "InvokeIpAdaptersXl"
+        },
+      "prompt_expansion": "PromptExpansion",
+      "ultralytics": "Ultralytics",
+      "sams": "Sams",
+      "diffusion_models": "Unet"
+    }
+
+  

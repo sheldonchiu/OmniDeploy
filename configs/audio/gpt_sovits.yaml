@@ -1,0 +1,47 @@
+title: GPT-SoVITS
+name: gpt_sovits
+use_python: true
+python_version: "3.10"
+expose: true
+
+prepare_repo: |-
+
+  TARGET_REPO_URL="https://github.com/RVC-Boss/GPT-SoVITS.git" \
+  TARGET_REPO_DIR=$REPO_DIR \
+  UPDATE_REPO=${{ name|upper }}_UPDATE_REPO \
+  UPDATE_REPO_COMMIT=${{ name|upper }}_UPDATE_REPO_COMMIT \
+  prepare_repo 
+
+prepare_env: |-
+  $UV_INSTALL_DIR/uv pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index https://download.pytorch.org/whl/cu121
+
+  apt-get install -y --no-install-recommends tzdata ffmpeg libsox-dev parallel > /dev/null
+
+  $UV_INSTALL_DIR/uv pip install -r requirements.txt
+
+  cd "$REPO_DIR"
+  ln -s $MODEL_DIR GPT_SoVITS/pretrained_models
+  chmod +x Docker/download.sh
+  bash Docker/download.sh
+  $UV_INSTALL_DIR/uv run Docker/download.py
+  $UV_INSTALL_DIR/uv run nltk.downloader averaged_perceptron_tagger cmudict
+
+action_before_start: ""
+
+start: |-
+  cd "$REPO_DIR"
+
+  PYTHONUNBUFFERED=1 service_loop "$UV_INSTALL_DIR/uv run webui.py > $LOG_DIR/{{ name }}.log 2>&1 &
+   
+  echo $! > /tmp/{{ name }}.pid
+
+export_required_env: ""
+setup_env: |-
+  export MODEL_DIR="$DATA_DIR/sovits_models"
+  export HF_HOME="$DATA_DIR/hf"
+  export REPO_DIR="$ROOT_REPO_DIR/GPT-SoVITS"
+
+  export {{ name|upper }}_PORT="9874,9873,9872,9871,9880"
+  export EXPOSE_PORTS="$EXPOSE_PORTS:${{ name|upper }}_PORT"
+  export PORT_MAPPING="$PORT_MAPPING:{{ name }},{{ name }},{{ name }},{{ name }},{{ name }}"
+  export HUGGINGFACE_TOKEN=$HF_TOKEN

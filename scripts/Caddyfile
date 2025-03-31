@@ -109,6 +109,15 @@
     }
 
     
+    redir /wan2gp /wan2gp/ 301
+    handle_path /wan2gp/* {
+        
+        import cors-api
+        reverse_proxy localhost:None
+        
+    }
+
+    
     redir /comfyui /comfyui/ 301
     handle_path /comfyui/* {
         
