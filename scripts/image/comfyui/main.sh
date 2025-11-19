@@ -24,7 +24,7 @@ if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
     
     python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
 
-    $UV_INSTALL_DIR/uv install comfy-cli
+    $UV_INSTALL_DIR/uv pip install comfy-cli
     comfy --workspace=$ROOT_REPO_DIR install
     
     touch $VENV_DIR/comfyui.prepared
