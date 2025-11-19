@@ -14,11 +14,6 @@ log "Setting up ComfyUI"
 if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
 
     
-    TARGET_REPO_URL="https://github.com/comfyanonymous/ComfyUI.git" \
-    TARGET_REPO_DIR=$REPO_DIR \
-    UPDATE_REPO=$COMFYUI_UPDATE_REPO \
-    UPDATE_REPO_COMMIT=$COMFYUI_UPDATE_REPO_COMMIT \
-    prepare_repo 
     rm -rf $VENV_DIR/comfyui-env
     
     echo "### Installing Python ###"
@@ -28,6 +23,9 @@ if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
     source $VENV_DIR/comfyui-env/bin/activate
     
     python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
+
+    $UV_INSTALL_DIR/uv install comfy-cli
+    comfy --workspace=$ROOT_REPO_DIR install
     
     touch $VENV_DIR/comfyui.prepared
 else

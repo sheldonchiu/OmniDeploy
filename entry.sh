@@ -43,7 +43,7 @@ if [[ ! -f "/tmp/prepared" ]]; then
 
   # Install UV
   echo "Installing UV"
-  curl -LsSf https://astral.sh/uv/0.6.5/install.sh | sh > /dev/null
+  curl -LsSf https://astral.sh/uv/0.9.10/install.sh | sh > /dev/null
 
   # install gum
   mkdir -p /etc/apt/keyrings
