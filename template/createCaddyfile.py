@@ -17,6 +17,8 @@ if __name__ == "__main__":
     # Load the YAML file as a Jinja2 template
     data = []
     for file in yaml_files:
+        if "deprecated" in file:
+            continue
         # Load the YAML file
         with open(file) as f:
             yaml_data = yaml.safe_load(f)

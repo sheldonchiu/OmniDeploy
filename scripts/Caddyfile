@@ -73,47 +73,11 @@
 
 
     
-    redir /kosmos2 /kosmos2/ 301
-    handle_path /kosmos2/* {
-        
-        import cors-api
-        reverse_proxy localhost:7014
-        
-    }
-
-    
-    redir /musicgen /musicgen/ 301
-    handle_path /musicgen/* {
-        
-        import cors-api
-        reverse_proxy localhost:7003
-        
-    }
-
-    
-    redir /sd-a111 /sd-a111/ 301
-    handle_path /sd-a111/* {
-        
-        import cors-api
-        reverse_proxy localhost:7008
-        
-    }
-
-    
     redir /swarmui /swarmui/ 301
     handle_path /swarmui/* {
         
         import cors-api
         reverse_proxy localhost:7016
-        
-    }
-
-    
-    redir /wan2gp /wan2gp/ 301
-    handle_path /wan2gp/* {
-        
-        import cors-api
-        reverse_proxy localhost:None
         
     }
 

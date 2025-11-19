@@ -68,7 +68,6 @@ if [[ ! -f "/tmp/prepared" ]]; then
   # Add alias to check the status of the web app
   chmod +x $WORKING_DIR/utils/script_runner.sh
   chmod +x $WORKING_DIR/utils/status_check.py
-  echo "alias status='watch -n 1 $VENV_DIR/omnideploy-env/bin/python $WORKING_DIR/utils/status_check.py'" >> ~/.bashrc
   echo "alias gui='bash $WORKING_DIR/utils/script_runner.sh'" >> ~/.bashrc
   source ~/.bashrc
 
