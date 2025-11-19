@@ -11,8 +11,8 @@ prepare_env: |-
   $UV_INSTALL_DIR/uv pip install comfy-cli
 
   $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu130
-  
-  comfy --workspace=$ROOT_REPO_DIR install --skip-prompt
+
+  comfy --workspace=$ROOT_REPO_DIR --skip-prompt install --nvidia
 
 download_model: |-
   bash $WORKING_DIR/utils/sd_model_download/main.sh

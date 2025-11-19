@@ -28,7 +28,7 @@ if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
 
     $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu130
 
-    comfy --workspace=$ROOT_REPO_DIR install --skip-prompt
+    comfy --workspace=$ROOT_REPO_DIR --skip-prompt install --nvidia
     
     touch $VENV_DIR/comfyui.prepared
 else
