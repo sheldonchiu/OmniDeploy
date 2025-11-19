@@ -68,13 +68,13 @@ if __name__ == "__main__":
                 with open(output_path / file, 'w') as f:
                     f.write(content)
     
-    if args.ai and not os.path.isfile(output_path / "README.md"):
-        sys.path.append(str(workspace_path / "fun"))
-        import auto_description as ai
-        title = yaml_data['title']
-        print(f"Preparing AI description for {yaml_data['title']}...")
-        response = ai.run_flow(f"Write a short description for {title}.")
-        desc = response['outputs'][0]['outputs'][0]['results']['message']['data']['text']
-        create_readme(title, desc, output_path / "README.md")
-        print(f"Description for {title} created successfully.")
+    # if args.ai and not os.path.isfile(output_path / "README.md"):
+    #     sys.path.append(str(workspace_path / "fun"))
+    #     import auto_description as ai
+    #     title = yaml_data['title']
+    #     print(f"Preparing AI description for {yaml_data['title']}...")
+    #     response = ai.run_flow(f"Write a short description for {title}.")
+    #     desc = response['outputs'][0]['outputs'][0]['results']['message']['data']['text']
+    #     create_readme(title, desc, output_path / "README.md")
+    #     print(f"Description for {title} created successfully.")
         

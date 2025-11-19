@@ -23,27 +23,16 @@ if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
     
     echo "### Installing Python ###"
     
-    $UV_INSTALL_DIR/uv venv --seed --python 3.12 $VENV_DIR/comfyui-env
+    $UV_INSTALL_DIR/uv venv --seed --python 3.13 $VENV_DIR/comfyui-env
     
     source $VENV_DIR/comfyui-env/bin/activate
     
     python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
-
-    cd $REPO_DIR
-    $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
-    $UV_INSTALL_DIR/uv pip install -r requirements.txt
-
-    $UV_INSTALL_DIR/uv pip install sageattention==1.0.6 
-
-    cd "$REPO_DIR/custom_nodes"
-    if [[ ! -d "comfyui-manager" ]]; then
-      git clone https://github.com/ltdrdata/ComfyUI-Manager comfyui-manager
-    fi
     
     touch $VENV_DIR/comfyui.prepared
 else
     
-    $UV_INSTALL_DIR/uv python install 3.12
+    $UV_INSTALL_DIR/uv python install 3.13
     source $VENV_DIR/comfyui-env/bin/activate
     
 fi

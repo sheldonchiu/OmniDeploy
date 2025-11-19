@@ -1,7 +1,7 @@
 title: ComfyUI
 name: comfyui
 use_python: true
-python_version: "3.12"
+python_version: "3.13"
 expose: true
 port: 7005
 
@@ -15,17 +15,6 @@ prepare_repo: |-
 
 prepare_env: |-
   python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
-
-  cd $REPO_DIR
-  $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
-  $UV_INSTALL_DIR/uv pip install -r requirements.txt
-
-  $UV_INSTALL_DIR/uv pip install sageattention==1.0.6 
-
-  cd "$REPO_DIR/custom_nodes"
-  if [[ ! -d "comfyui-manager" ]]; then
-    git clone https://github.com/ltdrdata/ComfyUI-Manager comfyui-manager
-  fi
 
 download_model: |-
   bash $WORKING_DIR/utils/sd_model_download/main.sh

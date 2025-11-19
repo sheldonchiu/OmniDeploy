@@ -3,14 +3,10 @@ name = "OmniDeploy"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "jinja2>=3.1.6",
     "nest-asyncio>=1.6.0",
     "python-dotenv>=1.0.1",
-]
-
-[project.optional-dependencies]
-ai = [
-    "langflow>=1.2.0",
+    "pyyaml>=6.0.3",
 ]
