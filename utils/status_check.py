@@ -1,19 +1,7 @@
-#!/usr/local/bin/python
 import os
 import subprocess
-
-try:
-    import psutil
-except ImportError:
-    subprocess.check_call(['pip', 'install', 'psutil'])
-    import psutil
-
-try:
-    from prettytable import PrettyTable
-except ImportError:
-    # Use subprocess to run the pip command
-    subprocess.check_call(['pip', 'install', 'prettytable'])
-    from prettytable import PrettyTable
+import psutil
+from prettytable import PrettyTable
 
 
 # Function to check if a process is running

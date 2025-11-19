@@ -330,7 +330,7 @@ run_status_monitor() {
     trap 'echo -e "\n${YELLOW}Monitor stopped. Returning to previous menu...${NC}"; sleep 1; return' INT
     
     # Run the status check script in the background with ESC key monitoring
-    watch -n 1 "python utils/status_check.py"
+    watch -n 1 "$VENV_DIR/omnideploy-env/bin/python utils/status_check.py"
     PID=$!
     
     # Check for ESC key while the python script is running

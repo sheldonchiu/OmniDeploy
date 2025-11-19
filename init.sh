@@ -1,5 +1,5 @@
 #!/bin/bash
-# docker run -it --rm -v /root:/data -p 8888:8888 --gpus all nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04 /bin/bash -c "apt-get -qq update && apt-get install -y curl > /dev/null && curl -s https://raw.githubusercontent.com/sheldonxxxx/OmniDeploy/refs/heads/dev/init.sh | bash && /bin/bash"
+# docker run -it --rm -v /root:/data -p 8888:8888 -v /mnt/data/OmniDeploy:/workspace --gpus all nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04 /bin/bash -c "apt-get -qq update && apt-get install -y curl > /dev/null && curl -s https://raw.githubusercontent.com/sheldonxxxx/OmniDeploy/refs/heads/dev/init.sh | bash && /bin/bash"
 set -e
 
 # Update and install dependencies with reduced verbosity

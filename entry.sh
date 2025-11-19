@@ -45,6 +45,13 @@ if [[ ! -f "/tmp/prepared" ]]; then
   echo "Installing UV"
   curl -LsSf https://astral.sh/uv/0.9.10/install.sh | sh > /dev/null
 
+  # Install dep for script
+  echo "Installing dependencies for script"
+  $UV_INSTALL_DIR/uv venv --seed --python 3.13 $VENV_DIR/omnideploy-env
+  source $VENV_DIR/omnideploy-env/bin/activate
+  $UV_INSTALL_DIR/uv pip install psutil prettytable
+  deactivate
+
   # install gum
   mkdir -p /etc/apt/keyrings
   # Download and add the GPG key, skipping if it already exists
@@ -61,7 +68,7 @@ if [[ ! -f "/tmp/prepared" ]]; then
   # Add alias to check the status of the web app
   chmod +x $WORKING_DIR/utils/script_runner.sh
   chmod +x $WORKING_DIR/utils/status_check.py
-  echo "alias status='watch -n 1 $WORKING_DIR/utils/status_check.py'" >> ~/.bashrc
+  echo "alias status='watch -n 1 $VENV_DIR/omnideploy-env/bin/python $WORKING_DIR/utils/status_check.py'" >> ~/.bashrc
   echo "alias gui='bash $WORKING_DIR/utils/script_runner.sh'" >> ~/.bashrc
   source ~/.bashrc
 
