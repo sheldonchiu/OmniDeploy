@@ -14,6 +14,11 @@ log "Setting up ComfyUI"
 if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
 
     
+    TARGET_REPO_URL="https://github.com/comfyanonymous/ComfyUI.git" \
+    TARGET_REPO_DIR=$REPO_DIR \
+    UPDATE_REPO=$COMFYUI_UPDATE_REPO \
+    UPDATE_REPO_COMMIT=$COMFYUI_UPDATE_REPO_COMMIT \
+    prepare_repo 
     rm -rf $VENV_DIR/comfyui-env
     
     echo "### Installing Python ###"
@@ -24,11 +29,14 @@ if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
     
     python $WORKING_DIR/utils/create_symlinks.py $current_dir/folder_mapping.json $MODEL_DIR $REPO_DIR/models
 
-    $UV_INSTALL_DIR/uv pip install comfy-cli
-
+    cd $REPO_DIR
     $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu130
+    $UV_INSTALL_DIR/uv pip install -r requirements.txt
 
-    comfy --workspace=$ROOT_REPO_DIR --skip-prompt install --nvidia
+    cd "$REPO_DIR/custom_nodes"
+    if [[ ! -d "comfyui-manager" ]]; then
+      git clone https://github.com/ltdrdata/ComfyUI-Manager comfyui-manager
+    fi
     
     touch $VENV_DIR/comfyui.prepared
 else
