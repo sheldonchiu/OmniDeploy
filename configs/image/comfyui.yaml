@@ -49,38 +49,28 @@ setup_env: |-
 extra_files:
   folder_mapping.json: |-
     {
-      "checkpoints": "StableDiffusion",
-      "vae": "VAE",
-      "loras": [
-        "Lora",
-        "LyCORIS"
-      ],
-      "upscale_models": [
-        "ESRGAN",
-        "RealESRGAN",
-        "SwinIR"
-      ],
-      "embeddings": "TextualInversion",
-      "hypernetworks": "Hypernetwork",
-      "controlnet": [
-        "ControlNet",
-        "T2IAdapter"
-      ],
-      "text_encoders": "TextEncoder",
-      "clip_vision": "InvokeClipVision",
+      "audio_encoders": "AudioEncoder",
+      "checkpoints": "Checkpoints",
+      "clip": "Clip",
+      "clip_vision": "ClipVision",
+      "controlnet": "ControlNet",
       "diffusers": "Diffusers",
-      "gligen": "GLIGEN",
+      "diffusion_models": "DiffusersModels",
+      "embeddings": "TextualInversion",
+      "gligen": "Gligen",
+      "hypernetworks": "Hypernetworks",
+      "latent_upscale_models": "LatentUpscaleModels",
+      "loras": "Loras",
+      "model_patches": "ModelPatches",
+      "photomaker": "Photomaker",
+      "style_models": "StyleModels",
+      "text_encoders": "TextEncoder",
+      "unet": "Unet",
+      "upscale_models": "UpscaleModels",
+      "vae": "VAE",
       "vae_approx": "ApproxVAE",
-      "ipadapter": 
-        {
-          "base": "IpAdapter",
-          "sd15": "InvokeIpAdapters15",
-          "sdxl": "InvokeIpAdaptersXl"
-        },
-      "prompt_expansion": "PromptExpansion",
-      "ultralytics": "Ultralytics",
-      "sams": "Sams",
-      "diffusion_models": "Unet"
+      "loras": "Loras",
+      "upscale_models": "UpscaleModels"
     }
 
   
