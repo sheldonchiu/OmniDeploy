@@ -14,7 +14,8 @@ mkdir -p "$WORKING_DIR"
 cd "$WORKING_DIR"
 if [[ ! -d "OmniDeploy" ]]; then
   git clone -q https://github.com/sheldonxxxx/OmniDeploy.git > /dev/null
+  git checkout dev
 fi
 cd "$WORKING_DIR/OmniDeploy"
-git checkout dev
+git pull -q origin dev > /dev/null
 bash entry.sh

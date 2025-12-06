@@ -32,11 +32,7 @@ if [[ "$REINSTALL_COMFYUI" || ! -f "$VENV_DIR/comfyui.prepared" ]]; then
     cd $REPO_DIR
     $UV_INSTALL_DIR/uv pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu130
     $UV_INSTALL_DIR/uv pip install -r requirements.txt
-
-    cd "$REPO_DIR/custom_nodes"
-    if [[ ! -d "comfyui-manager" ]]; then
-      git clone https://github.com/ltdrdata/ComfyUI-Manager comfyui-manager
-    fi
+    $UV_INSTALL_DIR/uv pip install -r manager_requirements.txt
     
     touch $VENV_DIR/comfyui.prepared
 else
@@ -65,7 +61,7 @@ if [[ -z "$INSTALL_ONLY" ]]; then
   log "Starting ComfyUI"
   cd "$REPO_DIR"
   mkdir -p $ROOT_REPO_DIR/settings/comfyui
-  PYTHONUNBUFFERED=1 service_loop "python main.py --dont-print-server --port $COMFYUI_PORT --user-directory $ROOT_REPO_DIR/settings/comfyui ${EXTRA_COMFYUI_ARGS}" > $LOG_DIR/comfyui.log 2>&1 &
+  PYTHONUNBUFFERED=1 service_loop "python main.py --enable-manager --dont-print-server --port $COMFYUI_PORT --user-directory $ROOT_REPO_DIR/settings/comfyui ${EXTRA_COMFYUI_ARGS}" > $LOG_DIR/comfyui.log 2>&1 &
   echo $! > /tmp/comfyui.pid
 fi
 
