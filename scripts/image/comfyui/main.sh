@@ -61,7 +61,7 @@ if [[ -z "$INSTALL_ONLY" ]]; then
   log "Starting ComfyUI"
   cd "$REPO_DIR"
   mkdir -p $ROOT_REPO_DIR/settings/comfyui
-  PYTHONUNBUFFERED=1 service_loop "python main.py --enable-manager --dont-print-server --port $COMFYUI_PORT --user-directory $ROOT_REPO_DIR/settings/comfyui ${EXTRA_COMFYUI_ARGS}" > $LOG_DIR/comfyui.log 2>&1 &
+  PYTHONUNBUFFERED=1 service_loop "python main.py --enable-manager --dont-print-server --host 0.0.0.0 --port $COMFYUI_PORT --user-directory $ROOT_REPO_DIR/settings/comfyui ${EXTRA_COMFYUI_ARGS}" > $LOG_DIR/comfyui.log 2>&1 &
   echo $! > /tmp/comfyui.pid
 fi
 
